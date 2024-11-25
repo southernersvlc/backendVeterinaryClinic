@@ -18,6 +18,9 @@ public class OwnerController {
 
     @PostMapping
     public ResponseEntity<?>  addOwner(@RequestBody Owner owner){
+        if (owner.getName().isEmpty() || owner.getSurname().isEmpty() || owner.getPhoneNumber().isEmpty()){
+            return new ResponseEntity<>("Fields cannot be empty",HttpStatus.BAD_REQUEST);
+        }
         ownerRepository.save(owner);
         return new ResponseEntity<>("Owner created correctly", HttpStatus.CREATED);
     }
