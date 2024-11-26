@@ -21,9 +21,9 @@ public class OwnerController {
             return new ResponseEntity<>("Fields cannot be empty",HttpStatus.BAD_REQUEST);
         }
 
-        /*if (ownerRepository.existsBySurname(owner.getSurname())){
-            return new ResponseEntity<>("The owner really exists", HttpStatus.BAD_REQUEST);
-        }*/
+        if (ownerRepository.existsByPhoneNumber(owner.getPhoneNumber())){
+            return new ResponseEntity<>("This phone number already exists", HttpStatus.BAD_REQUEST);
+        }
 
         ownerRepository.save(owner);
         return new ResponseEntity<>("Owner created correctly", HttpStatus.CREATED);
