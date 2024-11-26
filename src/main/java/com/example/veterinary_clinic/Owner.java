@@ -15,6 +15,12 @@ public class Owner {
     public Owner() {
     }
 
+    public Owner(String name, String surname, String phoneNumber) {
+        this.name = name;
+        this.surname = surname;
+        this.phoneNumber = phoneNumber;
+    }
+
     public Long getId() {
         return id;
     }
