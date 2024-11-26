@@ -3,7 +3,6 @@ package com.example.veterinary_clinic;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -17,22 +16,26 @@ public class OwnerController {
 
     @PostMapping
     public ResponseEntity<?>  addOwner(@RequestBody Owner owner){
+        String newPhoneNumber = owner.getPhoneNumber();
+
         if (owner.getName().isEmpty() || owner.getSurname().isEmpty() || owner.getPhoneNumber().isEmpty()){
-            return new ResponseEntity<>("Fields cannot be empty",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Fields cannot be empty.",HttpStatus.BAD_REQUEST);
         }
 
         if (ownerRepository.existsByPhoneNumber(owner.getPhoneNumber())){
-            return new ResponseEntity<>("This phone number already exists", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("This phone number already exists.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!owner.isValidPhoneNumber(newPhoneNumber)){
+            return new ResponseEntity<>("This is not a phone number, please try again.", HttpStatus.BAD_REQUEST);
         }
 
         ownerRepository.save(owner);
-        return new ResponseEntity<>("Owner created correctly", HttpStatus.CREATED);
+        return new ResponseEntity<>("Owner created correctly.", HttpStatus.CREATED);
     }
 
     @GetMapping
     public List<Owner> getAllOwners(){
         return ownerRepository.findAll();
     }
-
-
 }

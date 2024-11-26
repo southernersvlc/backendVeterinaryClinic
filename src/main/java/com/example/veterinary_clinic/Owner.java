@@ -48,4 +48,9 @@ public class Owner {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public static boolean isValidPhoneNumber(String phoneNumber){
+        String pattern = "^\\d{9}$";
+        return  phoneNumber.matches(pattern);
+    }
 }
