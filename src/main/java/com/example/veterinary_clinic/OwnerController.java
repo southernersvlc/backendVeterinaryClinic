@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/owners")
@@ -37,5 +38,16 @@ public class OwnerController {
     @GetMapping
     public List<Owner> getAllOwners(){
         return ownerRepository.findAll();
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOwnerById(@PathVariable Long id) {
+        Optional<Owner> optionalOwner = ownerRepository.findById(id);
+
+        if (optionalOwner.isPresent()) {
+            return new ResponseEntity<>(optionalOwner.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("This Id does not belong to any owner.", HttpStatus.NOT_FOUND);
     }
 }

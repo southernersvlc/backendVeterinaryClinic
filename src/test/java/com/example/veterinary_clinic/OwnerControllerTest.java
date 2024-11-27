@@ -49,7 +49,7 @@ class OwnerControllerTest {
                             "id": 2,
                             "name": "name2",
                             "surname": "surname2",
-                            "phoneNumber": "phone2"
+                            "phoneNumber": "687777235"
                         }
                     ]
                 """;
@@ -60,7 +60,6 @@ class OwnerControllerTest {
                 .andExpect(content().json(jsonResponse))
                 .andExpect(jsonPath("$[0].id", is(1)));
     }
-
 
     @Test
     void givenOwnerWithAnEmptyField_whenAddOwner_thenReturnBadRequest() throws Exception {
@@ -122,8 +121,36 @@ class OwnerControllerTest {
                 .content(ownerWithAWrongPhoneNumber))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("This is not a phone number, please try again."));
-
     }
 
+    @Test
+    void givenDuplicatePhoneNumber_whenAddOwner_thenReturnBadRequest() throws Exception {
+        String firstOwner = """
+        {
+            "name": "Jose",
+            "surname": "Vicent",
+            "phoneNumber": "123456789"
+        }
+    """;
+
+        mockMvc.perform(post("/owners")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(firstOwner))
+                .andExpect(status().isCreated());
+
+        String duplicatePhoneOwner = """
+        {
+            "name": "John",
+            "surname": "Doe",
+            "phoneNumber": "123456789"
+        }
+    """;
+
+        mockMvc.perform(post("/owners")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(duplicatePhoneOwner))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("This phone number already exists."));
+    }
 
 }
