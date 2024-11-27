@@ -50,4 +50,22 @@ public class OwnerController {
         }
         return new ResponseEntity<>("This Id does not belong to any owner.", HttpStatus.NOT_FOUND);
     }
-}
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateOwner(@PathVariable Long id, @RequestBody Owner owner){
+        Optional<Owner> optionalOwnerToUpdate = ownerRepository.findById(id);
+
+        if(optionalOwnerToUpdate.isPresent()){
+            Owner ownerToUpdate = optionalOwnerToUpdate.get();
+            ownerToUpdate.setName(owner.getName());
+            ownerToUpdate.setSurname(owner.getSurname());
+            ownerToUpdate.setPhoneNumber(owner.getPhoneNumber());
+
+            ownerRepository.save(ownerToUpdate);
+
+            return new ResponseEntity<>(ownerToUpdate, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.NOT_FOUND);
+        }
+        }
+    }
