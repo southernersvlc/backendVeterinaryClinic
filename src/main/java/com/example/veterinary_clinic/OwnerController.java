@@ -68,4 +68,19 @@ public class OwnerController {
             return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.NOT_FOUND);
         }
         }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteOwner(@PathVariable Long id) {
+        Optional<Owner> optionalOwnerToDelete = ownerRepository.findById(id);
+
+        if (optionalOwnerToDelete.isPresent()) {
+            ownerRepository.deleteById(id);
+            return new ResponseEntity<>("The Owner has been deleted correctly.", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.BAD_REQUEST);
     }
+
+    }
+
+
+
