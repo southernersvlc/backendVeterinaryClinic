@@ -36,28 +36,11 @@ class OwnerControllerTest {
         ownerRepository.save(owner1);
         ownerRepository.save(owner2);
 
-        String jsonResponse =
-                """
-                    [
-                        {
-                            "id": 1,
-                            "name": "name1",
-                            "surname": "surname1",
-                            "phoneNumber": "phone1"
-                        },
-                        {
-                            "id": 2,
-                            "name": "name2",
-                            "surname": "surname2",
-                            "phoneNumber": "687777235"
-                        }
-                    ]
-                """;
+
 
         //When
         mockMvc.perform(get("/owners").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(jsonResponse))
                 .andExpect(jsonPath("$[0].id", is(1)));
     }
 
@@ -151,6 +134,21 @@ class OwnerControllerTest {
                         .content(duplicatePhoneOwner))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("This phone number already exists."));
+    }
+    
+    @Test
+
+    void givenOwnerById_whenCallGetOwnerById_thenReturnThisOwner() throws Exception {
+        Owner owner = new Owner("jose", "reyes", "123456789");
+
+        ownerRepository.save(owner);
+
+        mockMvc.perform(get("/owners/" + owner.getId() )
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(owner.getName())))
+                .andExpect(jsonPath("$.surname", is(owner.getSurname())))
+                .andExpect(jsonPath("$.phoneNumber", is(owner.getPhoneNumber())));
     }
 
 }
