@@ -125,5 +125,34 @@ class OwnerControllerTest {
 
     }
 
+    @Test
+    void givenDuplicatePhoneNumber_whenAddOwner_thenReturnBadRequest() throws Exception {
+        String firstOwner = """
+    {
+        "name": "Jose",
+        "surname": "Vicent",
+        "phoneNumber": "123456789"
+    }
+""";
+
+        mockMvc.perform(post("/owners")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(firstOwner))
+                .andExpect(status().isCreated());
+
+        String duplicatePhoneOwner = """
+    {
+        "name": "Pepe",
+        "surname": "Garcia",
+        "phoneNumber": "123456789"
+    }
+""";
+
+        mockMvc.perform(post("/owners")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(duplicatePhoneOwner))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("This phone number already exists."));
+    }
 
 }
