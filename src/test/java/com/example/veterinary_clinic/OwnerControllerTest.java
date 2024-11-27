@@ -7,10 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.hamcrest.Matchers.is;
 
-import static org.junit.jupiter.api.Assertions.*;
+//import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
@@ -21,7 +22,11 @@ class OwnerControllerTest {
     private OwnerRepository ownerRepository;
 
     @Autowired
+    private OwnerController ownerController;
+
+    @Autowired
     MockMvc mockMvc;
+
 
     @Test
     void given2Owners_whenCallGetAllOwners_thenReturnAListTheseOwners() throws Exception {
@@ -55,4 +60,51 @@ class OwnerControllerTest {
                 .andExpect(content().json(jsonResponse))
                 .andExpect(jsonPath("$[0].id", is(1)));
     }
+
+
+    @Test
+    void givenOwnerWithAnEmptyField_whenAddOwner_thenReturnBadRequest() throws Exception {
+        String ownerWithEmptyPhone = """
+        {
+            "name": "Jose",
+            "surname": "Vicent",
+            "phoneNumber": ""
+        }
+    """;
+
+        mockMvc.perform(post("/owners")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(ownerWithEmptyPhone))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Fields cannot be empty."));
+
+        String ownerWithEmptySurname = """
+        {
+            "name": "Jose",
+            "surname": "",
+            "phoneNumber": "111111111"
+        }
+    """;
+
+        mockMvc.perform(post("/owners")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(ownerWithEmptySurname))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Fields cannot be empty."));
+
+        String ownerWithEmptyName = """
+        {
+            "name": "",
+            "surname": "Vicent",
+            "phoneNumber": "111111111"
+        }
+    """;
+
+        mockMvc.perform(post("/owners")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(ownerWithEmptyName))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Fields cannot be empty."));
+    }
+
 }
