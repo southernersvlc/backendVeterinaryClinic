@@ -107,4 +107,23 @@ class OwnerControllerTest {
                 .andExpect(content().string("Fields cannot be empty."));
     }
 
+    @Test
+    void givenOwnerWithAWrongPhoneNumber_whenAddOwner_thenReturnBadRequest() throws Exception {
+        String ownerWithAWrongPhoneNumber = """
+        {
+            "name": "Jose",
+            "surname": "Vicent",
+            "phoneNumber": "123as"
+        }
+    """;
+
+        mockMvc.perform(post("/owners")
+        .contentType(MediaType.APPLICATION_JSON)
+                .content(ownerWithAWrongPhoneNumber))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("This is not a phone number, please try again."));
+
+    }
+
+
 }
