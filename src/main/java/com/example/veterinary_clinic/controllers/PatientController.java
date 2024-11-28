@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/patients")
-
 public class PatientController {
 
         private final PatientRepository patientRepository;
@@ -52,10 +51,11 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatedPatient(@PathVariable Long id, @RequestBody Patient patient){
+    public ResponseEntity<?> updatePatient(@PathVariable Long id, @RequestBody Patient patient){
         Optional<Patient> optionalPatientToUpdate = patientRepository.findById(id);
+        Optional<Owner> optionalOwnerToUpdate = ownerRepository.findById(1L);
 
-        if(optionalPatientToUpdate.isPresent()){
+        if(optionalPatientToUpdate.isPresent()){ //u can't change the patient's owner, life sucks!
             Patient patientToUpdate = optionalPatientToUpdate.get();
             patientToUpdate.setName(patient.getName());
             patientToUpdate.setAge(patient.getAge());
@@ -67,6 +67,17 @@ public class PatientController {
         } else {
             return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePatient (@PathVariable Long id) {
+        Optional<Patient> optionalPatientToDelete = patientRepository.findById(id);
+
+        if (optionalPatientToDelete.isPresent()) {
+            patientRepository.deleteById(id);
+            return new ResponseEntity<>("The patient has been deleted correctly", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Ei buddy! this Id does not exist, chill out bro!", HttpStatus.BAD_REQUEST);
     }
 }
 
