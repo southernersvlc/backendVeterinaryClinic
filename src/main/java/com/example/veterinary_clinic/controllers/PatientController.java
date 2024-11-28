@@ -6,10 +6,9 @@ import com.example.veterinary_clinic.repositories.PatientRepository;
 import com.example.veterinary_clinic.repositories.OwnerRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/patients")
@@ -26,19 +25,15 @@ public class PatientController {
 
     @PostMapping
     public ResponseEntity<?> addPatient(@RequestBody Patient patient){
-        /*if (patient.getName().isEmpty() || patient.getBreed().isEmpty() || patient.getAge().isEmpty() ){
-            return new ResponseEntity<>("Fields cannot be empty.", HttpStatus.BAD_REQUEST);
+        Optional<Owner> ownerOptional = ownerRepository.findById(1L);
+
+        if (ownerOptional.isPresent()){
+            Owner owner = ownerOptional.get();
+            patient.setOwner(owner);
+            patientRepository.save(patient);
+            return new ResponseEntity<>("The patient is created correctly.",HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>("The owner does not exist.", HttpStatus.BAD_REQUEST);
         }
 
-        if (patientRepository.existsById(patient.getId())){
-            return new ResponseEntity<>("This id already exists.", HttpStatus.BAD_REQUEST);
-        }*/
-        //Owner owner = new Owner("Marc", "Marquez", "123456789");
-        //patient.setOwner(owner);
-
-        Owner owner = ownerRepository.findById(patient.getOwner().getId()).get();
-        patient.setOwner(owner);
-        patientRepository.save(patient);
-        return new ResponseEntity<>("Patient created correctly.", HttpStatus.CREATED);
-        }
 }

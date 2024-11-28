@@ -1,5 +1,6 @@
 package com.example.veterinary_clinic.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,11 +12,12 @@ public class Patient {
     private Long id;
     private String name;
     private String breed;
-    private enum Type{dog,cat};
+    //private enum Type{dog,cat};
     private String age;
 
     @ManyToOne
     @JoinColumn (name = "owner_id")
+    @JsonIgnoreProperties(value = "patients")
     private Owner owner;
 
     public Patient(Long id, String name, String breed, String age, Owner owner) {
