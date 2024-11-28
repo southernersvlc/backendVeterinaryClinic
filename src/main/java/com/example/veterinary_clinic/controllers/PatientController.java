@@ -51,6 +51,23 @@ public class PatientController {
         return new ResponseEntity<>("This Id does not belong to any patient.", HttpStatus.NOT_FOUND);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatedPatient(@PathVariable Long id, @RequestBody Patient patient){
+        Optional<Patient> optionalPatientToUpdate = patientRepository.findById(id);
+
+        if(optionalPatientToUpdate.isPresent()){
+            Patient patientToUpdate = optionalPatientToUpdate.get();
+            patientToUpdate.setName(patient.getName());
+            patientToUpdate.setAge(patient.getAge());
+            patientToUpdate.setBreed(patient.getBreed());
+
+            patientRepository.save(patientToUpdate);
+
+            return new ResponseEntity<>(patientToUpdate, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.NOT_FOUND);
+        }
+    }
 }
 
 
