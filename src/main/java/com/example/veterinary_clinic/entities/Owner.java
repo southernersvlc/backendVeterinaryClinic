@@ -2,6 +2,8 @@ package com.example.veterinary_clinic.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Owner {
     @Id
@@ -11,6 +13,9 @@ public class Owner {
     private String name;
     private String surname;
     private String phoneNumber;
+    //private List<Patient> patients;
+
+    //@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
 
     public Owner() {
     }
@@ -54,4 +59,7 @@ public class Owner {
         return  phoneNumber.matches(pattern);
     }
 
+    public void setId(Long ownerId) {
+        this.id = id;
+    }
 }

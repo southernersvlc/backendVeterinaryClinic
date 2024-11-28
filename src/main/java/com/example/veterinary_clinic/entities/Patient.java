@@ -9,7 +9,7 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    private String Name;
+    private String name;
     private String breed;
     private enum Type{dog,cat};
     private String age;
@@ -20,7 +20,7 @@ public class Patient {
 
     public Patient(Long id, String name, String breed, String age, Owner owner) {
         this.id = id;
-        Name = name;
+        this.name = name;
         this.breed = breed;
         this.age = age;
         this.owner = owner;
@@ -29,12 +29,20 @@ public class Patient {
     public Patient() {
     }
 
+    public Patient(String name, String breed, String age, Long owner_id) {
+        this.name = name;
+        this.breed = breed;
+        this.age = age;
+        this.owner = new Owner();
+        this.owner.setId(owner_id);
+    }
+
     public Long getId() {
         return id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public String getBreed() {
@@ -49,12 +57,14 @@ public class Patient {
         return owner;
     }
 
+    public long getOwnerId() { return owner.getId(); }
+
     public void setId(Long id) {
         this.id = id;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public void setBreed(String breed) {
