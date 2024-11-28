@@ -171,4 +171,14 @@ class OwnerControllerTest {
                 .andExpect(jsonPath("$.surname", is("Schumacher")))
                 .andExpect(jsonPath("$.phoneNumber", is("111333666")));
     }
+
+    @Test
+    void givenOwnerWithId_whenCallDeleteOwner_thenReturnIsOk() throws Exception {
+        Owner owner = new Owner("Vicent", "Roig", "666333111");
+        ownerRepository.save(owner);
+
+        mockMvc.perform(delete("/owners/"+ owner.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("The Owner has been deleted correctly."));
+    }
 }
