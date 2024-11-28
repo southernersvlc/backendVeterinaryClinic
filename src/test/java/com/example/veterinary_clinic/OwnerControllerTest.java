@@ -6,8 +6,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.hamcrest.Matchers.is;
 
@@ -137,8 +137,7 @@ class OwnerControllerTest {
     }
     
     @Test
-
-    void givenOwnerById_whenCallGetOwnerById_thenReturnThisOwner() throws Exception {
+    void givenOwnerWithId_whenCallGetOwnerById_thenReturnThisOwner() throws Exception {
         Owner owner = new Owner("jose", "reyes", "123456789");
 
         ownerRepository.save(owner);
@@ -151,4 +150,25 @@ class OwnerControllerTest {
                 .andExpect(jsonPath("$.phoneNumber", is(owner.getPhoneNumber())));
     }
 
+    @Test
+    void givenOwnerWithId_whenCallUpdateOwner_thenReturnUpdatedOwner() throws Exception {
+        Owner owner = new Owner("Lil", "Wayne", "666333111");
+        ownerRepository.save(owner);
+
+        String updatedOwner = """
+                    {
+                        "name": "Arthur",
+                        "surname": "Schumacher",
+                        "phoneNumber": "111333666"
+                    }
+                """;
+
+        mockMvc.perform(put("/owners/" + owner.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatedOwner))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("Arthur")))
+                .andExpect(jsonPath("$.surname", is("Schumacher")))
+                .andExpect(jsonPath("$.phoneNumber", is("111333666")));
+    }
 }

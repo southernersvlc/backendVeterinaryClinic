@@ -11,7 +11,7 @@ public class Patient {
     private Long id;
     private String Name;
     private String breed;
-    private enum type{dog,cat};
+    private enum Type{dog,cat};
     private String age;
 
     @ManyToOne
