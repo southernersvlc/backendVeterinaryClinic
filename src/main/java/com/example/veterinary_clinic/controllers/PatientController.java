@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -35,5 +36,14 @@ public class PatientController {
         }
         return new ResponseEntity<>("The owner does not exist.", HttpStatus.BAD_REQUEST);
         }
+        @GetMapping()
+        public List<Patient> getAllPatients(){
+            return patientRepository.findAll();
+        }
+
+
 
 }
+
+
+
