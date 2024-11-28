@@ -1,5 +1,6 @@
-package com.example.veterinary_clinic;
+package com.example.veterinary_clinic.repositories;
 
+import com.example.veterinary_clinic.entities.Owner;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

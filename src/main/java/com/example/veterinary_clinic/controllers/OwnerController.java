@@ -1,5 +1,7 @@
-package com.example.veterinary_clinic;
+package com.example.veterinary_clinic.controllers;
 
+import com.example.veterinary_clinic.repositories.OwnerRepository;
+import com.example.veterinary_clinic.entities.Owner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

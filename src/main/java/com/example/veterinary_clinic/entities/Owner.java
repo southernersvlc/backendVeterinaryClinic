@@ -1,4 +1,4 @@
-package com.example.veterinary_clinic;
+package com.example.veterinary_clinic.entities;
 
 import jakarta.persistence.*;
 

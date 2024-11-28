@@ -1,5 +1,8 @@
 package com.example.veterinary_clinic;
 
+import com.example.veterinary_clinic.controllers.OwnerController;
+import com.example.veterinary_clinic.entities.Owner;
+import com.example.veterinary_clinic.repositories.OwnerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
