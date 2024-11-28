@@ -41,7 +41,15 @@ public class PatientController {
             return patientRepository.findAll();
         }
 
+        @GetMapping ("/{id}")
+        public  ResponseEntity<?> getPatientById(@PathVariable Long id) {
+        Optional<Patient> optionalPatient = patientRepository.findById(id);
 
+        if (optionalPatient.isPresent()) {
+            return new ResponseEntity<>(optionalPatient.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("This Id does not belong to any patient.", HttpStatus.NOT_FOUND);
+    }
 
 }
 
