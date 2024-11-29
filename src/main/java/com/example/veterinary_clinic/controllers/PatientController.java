@@ -15,53 +15,55 @@ import java.util.Optional;
 @RequestMapping("/patients")
 public class PatientController {
 
-        private final PatientRepository patientRepository;
-        private final OwnerRepository ownerRepository;
+    private final PatientRepository patientRepository;
+    private final OwnerRepository ownerRepository;
 
-        public PatientController(PatientRepository patientRepository, OwnerRepository ownerRepository) {
-            this.patientRepository = patientRepository;
-            this.ownerRepository = ownerRepository;
-        }
+    public PatientController(PatientRepository patientRepository, OwnerRepository ownerRepository) {
+        this.patientRepository = patientRepository;
+        this.ownerRepository = ownerRepository;
+    }
 
-        @PostMapping
-        public ResponseEntity<?> addPatient(@RequestBody Patient patient){
-            if (patient.getBreed().isEmpty()){
-                patient.setBreed("unknown");
-            }
-            /*Optional<Owner> ownerOptional = ownerRepository.findById(1L);
 
-            if (ownerOptional.isPresent()){
-                Owner owner = ownerOptional.get();
-                patient.setOwner(owner);
-                patientRepository.save(patient);
-                return new ResponseEntity<>("The patient is created correctly.",HttpStatus.CREATED);
-            }
-            return new ResponseEntity<>("The owner does not exist.", HttpStatus.BAD_REQUEST);*/
-            patientRepository.save(patient);
-            return new ResponseEntity<>("The patient is created correctly.",HttpStatus.CREATED);
-        }
+    @GetMapping()
+    public List<Patient> getAllPatients() {
+        return patientRepository.findAll();
+    }
 
-        @GetMapping()
-        public List<Patient> getAllPatients(){
-            return patientRepository.findAll();
-        }
-
-        @GetMapping ("/{id}")
-        public  ResponseEntity<?> getPatientById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPatientById(@PathVariable Long id) {
         Optional<Patient> optionalPatient = patientRepository.findById(id);
 
         if (optionalPatient.isPresent()) {
             return new ResponseEntity<>(optionalPatient.get(), HttpStatus.OK);
         }
+
         return new ResponseEntity<>("This Id does not belong to any patient.", HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updatePatient(@PathVariable Long id, @RequestBody Patient patient){
-        Optional<Patient> optionalPatientToUpdate = patientRepository.findById(id);
-        Optional<Owner> optionalOwnerToUpdate = ownerRepository.findById(1L);
+    @PostMapping
+    public ResponseEntity<?> addPatient(@RequestBody Patient patient, @RequestParam Long ownerId) {
 
-        if(optionalPatientToUpdate.isPresent()){ //u can't change the patient's owner, life sucks!
+        Optional<Owner> ownerOptional = ownerRepository.findById(ownerId);
+
+        if (!ownerOptional.isPresent()) {
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The tutor does not exist with this id" + ownerId);
+        }
+
+        Owner owner = ownerOptional.get();
+        patient.setOwner(owner);
+        Patient newPatient = patientRepository.save(patient);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(newPatient);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePatient(@PathVariable Long id, @RequestBody Patient patient) {
+
+        Optional<Patient> optionalPatientToUpdate = patientRepository.findById(id);
+
+        if (optionalPatientToUpdate.isPresent()) {
             Patient patientToUpdate = optionalPatientToUpdate.get();
             patientToUpdate.setName(patient.getName());
             patientToUpdate.setAge(patient.getAge());
@@ -70,19 +72,22 @@ public class PatientController {
             patientRepository.save(patientToUpdate);
 
             return new ResponseEntity<>(patientToUpdate, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.NOT_FOUND);
         }
+
+        return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePatient (@PathVariable Long id) {
+    public ResponseEntity<?> deletePatient(@PathVariable Long id) {
+
         Optional<Patient> optionalPatientToDelete = patientRepository.findById(id);
 
         if (optionalPatientToDelete.isPresent()) {
             patientRepository.deleteById(id);
+
             return new ResponseEntity<>("The patient has been deleted correctly", HttpStatus.OK);
         }
+
         return new ResponseEntity<>("Ei buddy! this Id does not exist, chill out bro!", HttpStatus.BAD_REQUEST);
     }
 }

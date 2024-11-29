@@ -15,8 +15,8 @@ public class Owner {
     private String surname;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "owner")
-    public List<Patient>  patients = new ArrayList<>();
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Patient> patientsList = new ArrayList<>();
 
     public Owner() {
     }

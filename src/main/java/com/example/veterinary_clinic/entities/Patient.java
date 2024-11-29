@@ -12,12 +12,10 @@ public class Patient {
     private Long id;
     private String name;
     private String breed;
-    //private enum Type{dog,cat};
     private String age;
 
     @ManyToOne
-    @JoinColumn (name = "owner_id")
-    @JsonIgnoreProperties(value = "patients")
+    @JoinColumn(name = "owner_id", nullable = false)
     private Owner owner;
 
     public Patient(Long id, String name, String breed, String age, Owner owner) {
@@ -31,14 +29,6 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(String name, String breed, String age, Long owner_id) {
-        this.name = name;
-        this.breed = breed;
-        this.age = age;
-        this.owner = new Owner();
-        this.owner.setId(owner_id);
-    }
-
     public Long getId() {
         return id;
     }
@@ -47,34 +37,28 @@ public class Patient {
         return name;
     }
 
-    public String getBreed() {
-        return breed;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public long getOwnerId() { return owner.getId(); }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBreed() {
+        return breed;
     }
 
     public void setBreed(String breed) {
         this.breed = breed;
     }
 
+    public String getAge() {
+        return age;
+    }
+
     public void setAge(String age) {
         this.age = age;
+    }
+
+    public Owner getOwner() {
+        return owner;
     }
 
     public void setOwner(Owner owner) {
