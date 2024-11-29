@@ -18,7 +18,7 @@ public class OwnerController {
     }
 
     @PostMapping
-    public ResponseEntity<?>  addOwner(@RequestBody Owner owner){
+    public ResponseEntity<?> addOwner(@RequestBody Owner owner){
         String newPhoneNumber = owner.getPhoneNumber();
 
         if (owner.getName().isEmpty() || owner.getSurname().isEmpty() || owner.getPhoneNumber().isEmpty()){
@@ -34,7 +34,7 @@ public class OwnerController {
         }
 
         ownerRepository.save(owner);
-        return new ResponseEntity<>("Owner created correctly.", HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(owner);
     }
 
     @GetMapping

@@ -2,6 +2,7 @@ package com.example.veterinary_clinic.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,9 +14,9 @@ public class Owner {
     private String name;
     private String surname;
     private String phoneNumber;
-    //private List<Patient> patients;
 
-    //@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Patient> patientsList = new ArrayList<>();
 
     public Owner() {
     }
