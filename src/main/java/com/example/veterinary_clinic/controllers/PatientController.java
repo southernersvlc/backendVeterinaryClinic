@@ -23,18 +23,24 @@ public class PatientController {
             this.ownerRepository = ownerRepository;
         }
 
-    @PostMapping
-    public ResponseEntity<?> addPatient(@RequestBody Patient patient){
-        Optional<Owner> ownerOptional = ownerRepository.findById(1L);
+        @PostMapping
+        public ResponseEntity<?> addPatient(@RequestBody Patient patient){
+            if (patient.getBreed().isEmpty()){
+                patient.setBreed("unknown");
+            }
+            /*Optional<Owner> ownerOptional = ownerRepository.findById(1L);
 
-        if (ownerOptional.isPresent()){
-            Owner owner = ownerOptional.get();
-            patient.setOwner(owner);
+            if (ownerOptional.isPresent()){
+                Owner owner = ownerOptional.get();
+                patient.setOwner(owner);
+                patientRepository.save(patient);
+                return new ResponseEntity<>("The patient is created correctly.",HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>("The owner does not exist.", HttpStatus.BAD_REQUEST);*/
             patientRepository.save(patient);
             return new ResponseEntity<>("The patient is created correctly.",HttpStatus.CREATED);
         }
-        return new ResponseEntity<>("The owner does not exist.", HttpStatus.BAD_REQUEST);
-        }
+
         @GetMapping()
         public List<Patient> getAllPatients(){
             return patientRepository.findAll();
