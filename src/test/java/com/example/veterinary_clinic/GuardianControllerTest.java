@@ -1,13 +1,14 @@
 package com.example.veterinary_clinic;
 
-import com.example.veterinary_clinic.controllers.OwnerController;
-import com.example.veterinary_clinic.entities.Owner;
-import com.example.veterinary_clinic.repositories.OwnerRepository;
+import com.example.veterinary_clinic.controllers.GuardianController;
+import com.example.veterinary_clinic.entities.Guardian;
+import com.example.veterinary_clinic.repositories.GuardianRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -19,37 +20,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class OwnerControllerTest {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+
+class GuardianControllerTest {
 
     @Autowired
-    private OwnerRepository ownerRepository;
+    private GuardianRepository guardianRepository;
 
     @Autowired
-    private OwnerController ownerController;
+    private GuardianController guardianController;
 
     @Autowired
     MockMvc mockMvc;
 
 
     @Test
-    void given2Owners_whenCallGetAllOwners_thenReturnAListTheseOwners() throws Exception {
+    void given2Guardians_whenCallGetAllGuardians_thenReturnAListTheseGuardians() throws Exception {
         //Given
-        Owner owner1 = new Owner("name1", "surname1", "phone1");
-        Owner owner2 = new Owner("name2", "surname2", "phone2");
-        ownerRepository.save(owner1);
-        ownerRepository.save(owner2);
+        Guardian guardian1 = new Guardian("name1", "surname1", "phone1");
+        Guardian guardian2 = new Guardian("name2", "surname2", "phone2");
+        guardianRepository.save(guardian1);
+        guardianRepository.save(guardian2);
 
 
 
         //When
-        mockMvc.perform(get("/owners").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/guardians").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(1)));
     }
 
     @Test
-    void givenOwnerWithAnEmptyField_whenAddOwner_thenReturnBadRequest() throws Exception {
-        String ownerWithEmptyPhone = """
+    void givenGuardianWithAnEmptyField_whenAddGuardian_thenReturnBadRequest() throws Exception {
+        String guardianWithEmptyPhone = """
         {
             "name": "Jose",
             "surname": "Vicent",
@@ -57,13 +60,13 @@ class OwnerControllerTest {
         }
     """;
 
-        mockMvc.perform(post("/owners")
+        mockMvc.perform(post("/guardians")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(ownerWithEmptyPhone))
+                        .content(guardianWithEmptyPhone))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Fields cannot be empty."));
 
-        String ownerWithEmptySurname = """
+        String guardianWithEmptySurname = """
         {
             "name": "Jose",
             "surname": "",
@@ -71,13 +74,13 @@ class OwnerControllerTest {
         }
     """;
 
-        mockMvc.perform(post("/owners")
+        mockMvc.perform(post("/guardians")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(ownerWithEmptySurname))
+                        .content(guardianWithEmptySurname))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Fields cannot be empty."));
 
-        String ownerWithEmptyName = """
+        String guardianWithEmptyName = """
         {
             "name": "",
             "surname": "Vicent",
@@ -85,16 +88,16 @@ class OwnerControllerTest {
         }
     """;
 
-        mockMvc.perform(post("/owners")
+        mockMvc.perform(post("/guardians")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(ownerWithEmptyName))
+                        .content(guardianWithEmptyName))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Fields cannot be empty."));
     }
 
     @Test
-    void givenOwnerWithAWrongPhoneNumber_whenAddOwner_thenReturnBadRequest() throws Exception {
-        String ownerWithAWrongPhoneNumber = """
+    void givenGuardianWithAWrongPhoneNumber_whenAddGuardian_thenReturnBadRequest() throws Exception {
+        String guardianWithAWrongPhoneNumber = """
         {
             "name": "Jose",
             "surname": "Vicent",
@@ -102,16 +105,16 @@ class OwnerControllerTest {
         }
     """;
 
-        mockMvc.perform(post("/owners")
+        mockMvc.perform(post("/guardians")
         .contentType(MediaType.APPLICATION_JSON)
-                .content(ownerWithAWrongPhoneNumber))
+                .content(guardianWithAWrongPhoneNumber))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("This is not a phone number, please try again."));
     }
 
     @Test
-    void givenDuplicatePhoneNumber_whenAddOwner_thenReturnBadRequest() throws Exception {
-        String firstOwner = """
+    void givenDuplicatePhoneNumber_whenAddGuardian_thenReturnBadRequest() throws Exception {
+        String firstGuardian = """
         {
             "name": "Jose",
             "surname": "Vicent",
@@ -119,12 +122,12 @@ class OwnerControllerTest {
         }
     """;
 
-        mockMvc.perform(post("/owners")
+        mockMvc.perform(post("/guardians")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(firstOwner))
+                        .content(firstGuardian))
                 .andExpect(status().isCreated());
 
-        String duplicatePhoneOwner = """
+        String duplicatePhoneGuardian = """
         {
             "name": "John",
             "surname": "Doe",
@@ -132,33 +135,33 @@ class OwnerControllerTest {
         }
     """;
 
-        mockMvc.perform(post("/owners")
+        mockMvc.perform(post("/guardians")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(duplicatePhoneOwner))
+                        .content(duplicatePhoneGuardian))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("This phone number already exists."));
     }
     
     @Test
-    void givenOwnerWithId_whenCallGetOwnerById_thenReturnThisOwner() throws Exception {
-        Owner owner = new Owner("jose", "reyes", "123456789");
+    void givenGuardianWithId_whenCallGetGuardianById_thenReturnThisGuardian() throws Exception {
+        Guardian guardian = new Guardian("jose", "reyes", "123456789");
 
-        ownerRepository.save(owner);
+        guardianRepository.save(guardian);
 
-        mockMvc.perform(get("/owners/" + owner.getId() )
+        mockMvc.perform(get("/guardians/" + guardian.getId() )
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is(owner.getName())))
-                .andExpect(jsonPath("$.surname", is(owner.getSurname())))
-                .andExpect(jsonPath("$.phoneNumber", is(owner.getPhoneNumber())));
+                .andExpect(jsonPath("$.name", is(guardian.getName())))
+                .andExpect(jsonPath("$.surname", is(guardian.getSurname())))
+                .andExpect(jsonPath("$.phoneNumber", is(guardian.getPhoneNumber())));
     }
 
     @Test
-    void givenOwnerWithId_whenCallUpdateOwner_thenReturnUpdatedOwner() throws Exception {
-        Owner owner = new Owner("Lil", "Wayne", "666333111");
-        ownerRepository.save(owner);
+    void givenGuardianWithId_whenCallUpdateGuardian_thenReturnUpdatedGuardian() throws Exception {
+        Guardian guardian = new Guardian("Lil", "Wayne", "666333111");
+        guardianRepository.save(guardian);
 
-        String updatedOwner = """
+        String updatedGuardian = """
                     {
                         "name": "Arthur",
                         "surname": "Schumacher",
@@ -166,9 +169,9 @@ class OwnerControllerTest {
                     }
                 """;
 
-        mockMvc.perform(put("/owners/" + owner.getId())
+        mockMvc.perform(put("/guardians/" + guardian.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(updatedOwner))
+                        .content(updatedGuardian))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Arthur")))
                 .andExpect(jsonPath("$.surname", is("Schumacher")))
@@ -176,12 +179,12 @@ class OwnerControllerTest {
     }
 
     @Test
-    void givenOwnerWithId_whenCallDeleteOwner_thenReturnIsOk() throws Exception {
-        Owner owner = new Owner("Vicent", "Roig", "666333111");
-        ownerRepository.save(owner);
+    void givenGuardianWithId_whenCallDeleteGuardian_thenReturnIsOk() throws Exception {
+        Guardian guardian = new Guardian("Vicent", "Roig", "666333111");
+        guardianRepository.save(guardian);
 
-        mockMvc.perform(delete("/owners/"+ owner.getId()))
+        mockMvc.perform(delete("/guardians/"+ guardian.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("The Owner has been deleted correctly."));
+                .andExpect(content().string("The Guardian has been deleted correctly."));
     }
 }

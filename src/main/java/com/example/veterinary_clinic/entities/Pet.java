@@ -1,11 +1,10 @@
 package com.example.veterinary_clinic.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 
-public class Patient {
+public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -15,18 +14,18 @@ public class Patient {
     private String age;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
-    private Owner owner;
+    @JoinColumn(name = "guardian_id", nullable = false)
+    private Guardian guardian;
 
-    public Patient(Long id, String name, String breed, String age, Owner owner) {
+    public Pet(Long id, String name, String breed, String age, Guardian guardian) {
         this.id = id;
         this.name = name;
         this.breed = breed;
         this.age = age;
-        this.owner = owner;
+        this.guardian = guardian;
     }
 
-    public Patient() {
+    public Pet() {
     }
 
     public Long getId() {
@@ -57,11 +56,11 @@ public class Patient {
         this.age = age;
     }
 
-    public Owner getOwner() {
-        return owner;
+    public Guardian getGuardian() {
+        return guardian;
     }
 
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setGuardian(Guardian guardian) {
+        this.guardian = guardian;
     }
 }

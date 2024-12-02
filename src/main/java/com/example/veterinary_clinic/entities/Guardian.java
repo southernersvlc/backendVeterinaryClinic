@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Owner {
+public class Guardian {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -15,13 +15,13 @@ public class Owner {
     private String surname;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    private List<Patient> patientsList = new ArrayList<>();
+    @OneToMany(mappedBy = "guardian", cascade = CascadeType.ALL)
+    private List<Pet> petsList = new ArrayList<>();
 
-    public Owner() {
+    public Guardian() {
     }
 
-    public Owner(String name, String surname, String phoneNumber) {
+    public Guardian(String name, String surname, String phoneNumber) {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
@@ -60,7 +60,7 @@ public class Owner {
         return  phoneNumber.matches(pattern);
     }
 
-    public void setId(Long ownerId) {
+    public void setId(Long guardianId) {
         this.id = id;
     }
 }
