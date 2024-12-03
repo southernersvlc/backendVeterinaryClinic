@@ -94,7 +94,28 @@ class PetControllerTest {
     }
 
     @Test
-    void updatePet() {
+    void givenAPet_whenCallUpdatePet_thenThisPetIsUpdated() throws Exception {
+        Guardian guardian1 = new Guardian("Lil", "Wayne", "666333111");
+        guardianRepository.save(guardian1);
+        Pet pet1 = new Pet("Rambo", "StrikeDog", "Cat", "3", guardian1);
+        petRepository.save(pet1);
+        String petToUpdate ="""
+             {
+                "id" : 1,
+                "name" : "Terminator",
+                "breed" : "Persa",
+                "species" : "Cat",
+                "age" : "4",
+                "guardian_id" : 1
+                }""";
+
+        mockMvc.perform(put("/pets/1", petToUpdate)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(petToUpdate))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("Terminator")))
+                .andExpect(jsonPath("$.breed", is("Persa")));
+
     }
 
     @Test
