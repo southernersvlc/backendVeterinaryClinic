@@ -2,6 +2,7 @@ package com.example.veterinary_clinic.controllers;
 
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.entities.Guardian;
+import com.example.veterinary_clinic.services.GuardianService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ import java.util.Optional;
 @RequestMapping("/guardians")
 public class GuardianController {
     private final GuardianRepository guardianRepository;
+    private final GuardianService guardianService;
 
-    public GuardianController(GuardianRepository guardianRepository) {
+    public GuardianController(GuardianRepository guardianRepository, GuardianService guardianService) {
         this.guardianRepository = guardianRepository;
+        this.guardianService = guardianService;
     }
 
     @PostMapping
@@ -55,12 +58,8 @@ public class GuardianController {
 
     @GetMapping("/name")
     public ResponseEntity<?> getGuardianByName(@RequestParam String name) {
-        List<Guardian> guardians = guardianRepository.findByNameIgnoreCaseContaining(name);
-
-        if (!guardians.isEmpty()) {
-            return new ResponseEntity<>(guardians, HttpStatus.OK);
-        }
-        return new ResponseEntity<>("The guardian with this name does not exist.", HttpStatus.NOT_FOUND);
+        List<Guardian> guardians = guardianService.findByNameIgnoreCaseContaining(name);
+        return new ResponseEntity<>(guardians, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
