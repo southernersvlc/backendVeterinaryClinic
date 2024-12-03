@@ -1,5 +1,6 @@
 package com.example.veterinary_clinic.controllers;
 
+import com.example.veterinary_clinic.dtos.PetRequest;
 import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.entities.Pet;
 import com.example.veterinary_clinic.repositories.PetRepository;
@@ -20,7 +21,7 @@ public class PetController {
     private final GuardianRepository guardianRepository;
     private final PetServices petServices;
 
-    public PetController(PetRepository petRepository, GuardianRepository guardianRepository) {
+    public PetController(PetRepository petRepository, GuardianRepository guardianRepository, PetServices petServices) {
         this.petRepository = petRepository;
         this.guardianRepository = guardianRepository;
         this.petServices = petServices;
@@ -44,20 +45,18 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addPet(@RequestBody Pet pet, @RequestParam Long guardianId) {
 
-        Optional<Guardian> optionalGuardian = guardianRepository.findById(guardianId);
+    public ResponseEntity<Pet> addPet(@RequestBody PetRequest petRequest) {//@RequestParam Long guardianId
+        petServices.createPet(petRequest);
+        return new ResponseEntity<>(new Pet(), HttpStatus.CREATED);
 
+        /*Optional<Guardian> optionalGuardian = guardianRepository.findById(guardianId);
         if (!optionalGuardian.isPresent()) {
-
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The guardian does not exist with this id" + guardianId);
         }
-
         Guardian guardian = optionalGuardian.get();
-        pet.setGuardian(guardian);
-        Pet newPet = petRepository.save(pet);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(newPet);
+        petRequest.pet.setGuardian(guardian);
+        Pet newPet = petRepository.save(pet); */
     }
 
 
