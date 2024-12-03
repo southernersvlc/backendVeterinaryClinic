@@ -21,7 +21,7 @@ public class GuardianController {
     public ResponseEntity<?> addGuardian(@RequestBody Guardian guardian){
         String newPhoneNumber = guardian.getPhoneNumber();
 
-        if (guardian.getName().isEmpty() || guardian.getSurname().isEmpty() || guardian.getPhoneNumber().isEmpty()){
+        if (guardian.getName().isEmpty() ||  guardian.getPhoneNumber().isEmpty()){
             return new ResponseEntity<>("Fields cannot be empty.",HttpStatus.BAD_REQUEST);
         }
 
@@ -60,7 +60,6 @@ public class GuardianController {
         if(optionalGuardianToUpdate.isPresent()){
             Guardian guardianToUpdate = optionalGuardianToUpdate.get();
             guardianToUpdate.setName(guardian.getName());
-            guardianToUpdate.setSurname(guardian.getSurname());
             guardianToUpdate.setPhoneNumber(guardian.getPhoneNumber());
 
             guardianRepository.save(guardianToUpdate);

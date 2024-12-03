@@ -12,19 +12,21 @@ public class Guardian {
     @Column(name = "id", nullable = false)
     private Long id;
     private String name;
-    private String surname;
     private String phoneNumber;
+    private String email;
+    private String address;
 
     @OneToMany(mappedBy = "guardian", cascade = CascadeType.ALL)
     private List<Pet> petsList = new ArrayList<>();
-
     public Guardian() {
     }
 
-    public Guardian(String name, String surname, String phoneNumber) {
+
+    public Guardian(String name, String phoneNumber, String email, String address) {
         this.name = name;
-        this.surname = surname;
         this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
     }
 
     public Long getId() {
@@ -37,14 +39,6 @@ public class Guardian {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public String getPhoneNumber() {
@@ -62,5 +56,21 @@ public class Guardian {
 
     public void setId(Long guardianId) {
         this.id = id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
