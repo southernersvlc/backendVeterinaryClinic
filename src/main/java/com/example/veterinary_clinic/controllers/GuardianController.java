@@ -18,18 +18,18 @@ public class GuardianController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addGuardian(@RequestBody Guardian guardian){
+    public ResponseEntity<?> addGuardian(@RequestBody Guardian guardian) {
         String newPhoneNumber = guardian.getPhoneNumber();
 
-        if (guardian.getName().isEmpty() ||  guardian.getPhoneNumber().isEmpty()){
-            return new ResponseEntity<>("Fields cannot be empty.",HttpStatus.BAD_REQUEST);
+        if (guardian.getName().isEmpty() || guardian.getPhoneNumber().isEmpty()) {
+            return new ResponseEntity<>("Fields cannot be empty.", HttpStatus.BAD_REQUEST);
         }
 
-        if (guardianRepository.existsByPhoneNumber(guardian.getPhoneNumber())){
+        if (guardianRepository.existsByPhoneNumber(guardian.getPhoneNumber())) {
             return new ResponseEntity<>("This phone number already exists.", HttpStatus.BAD_REQUEST);
         }
 
-        if (!guardian.isValidPhoneNumber(newPhoneNumber)){
+        if (!guardian.isValidPhoneNumber(newPhoneNumber)) {
             return new ResponseEntity<>("This is not a phone number, please try again.", HttpStatus.BAD_REQUEST);
         }
 
@@ -38,12 +38,12 @@ public class GuardianController {
     }
 
     @GetMapping
-    public List<Guardian> getAllGuardians(){
+    public List<Guardian> getAllGuardians() {
         return guardianRepository.findAll();
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<?> getGuardianById(@PathVariable Long id) {
         Optional<Guardian> optionalGuardian = guardianRepository.findById(id);
 
@@ -53,11 +53,21 @@ public class GuardianController {
         return new ResponseEntity<>("This Id does not belong to any guardian.", HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/name")
+    public ResponseEntity<?> getGuardianByName(@RequestParam String name) {
+        List<Guardian> guardians = guardianRepository.findByNameIgnoreCaseContaining(name);
+
+        if (!guardians.isEmpty()) {
+            return new ResponseEntity<>(guardians, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("The guardian with this name does not exist.", HttpStatus.NOT_FOUND);
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateGuardian(@PathVariable Long id, @RequestBody Guardian guardian){
+    public ResponseEntity<?> updateGuardian(@PathVariable Long id, @RequestBody Guardian guardian) {
         Optional<Guardian> optionalGuardianToUpdate = guardianRepository.findById(id);
 
-        if(optionalGuardianToUpdate.isPresent()){
+        if (optionalGuardianToUpdate.isPresent()) {
             Guardian guardianToUpdate = optionalGuardianToUpdate.get();
             guardianToUpdate.setName(guardian.getName());
             guardianToUpdate.setPhoneNumber(guardian.getPhoneNumber());
@@ -68,7 +78,7 @@ public class GuardianController {
         } else {
             return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.NOT_FOUND);
         }
-        }
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteGuardian(@PathVariable Long id) {
@@ -81,7 +91,7 @@ public class GuardianController {
         return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.BAD_REQUEST);
     }
 
-    }
+}
 
 
 
