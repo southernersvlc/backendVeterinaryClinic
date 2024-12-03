@@ -83,7 +83,14 @@ class PetControllerTest {
     }
 
     @Test
-    void addPet() {
+    void givenNewPet_whenCallAddPet_thenPetIsSavedInRepo() throws Exception {
+        Guardian guardian1 = new Guardian("Lil", "Wayne", "666333111");
+        guardianRepository.save(guardian1);
+        Pet pet1 = new Pet("Rambo", "StrikeDog", "Cat", "3", guardian1);
+
+        mockMvc.perform(post("/pets").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(1)));
     }
 
     @Test
