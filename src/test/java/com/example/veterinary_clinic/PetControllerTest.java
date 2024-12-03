@@ -119,6 +119,14 @@ class PetControllerTest {
     }
 
     @Test
-    void deletePet() {
+    void givenAPetWithId_whenCallDeletePet_thenDeleteThisPet() throws Exception {
+        Guardian guardian1 = new Guardian("Paco", "Roig", "666333111");
+        guardianRepository.save(guardian1);
+        Pet pet1 = new Pet("Charmander", "PokemonDog", "Dog", "11", guardian1);
+        petRepository.save(pet1);
+
+        mockMvc.perform(delete("/pets/" + pet1.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("The pet has been deleted correctly."));
     }
 }
