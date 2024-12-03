@@ -68,6 +68,7 @@ public class PetController {
             petToUpdate.setName(pet.getName());
             petToUpdate.setAge(pet.getAge());
             petToUpdate.setBreed(pet.getBreed());
+            petToUpdate.setSpecies(pet.getSpecies());
 
             petRepository.save(petToUpdate);
 

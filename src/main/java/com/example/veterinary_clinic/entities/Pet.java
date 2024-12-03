@@ -11,16 +11,17 @@ public class Pet {
     private Long id;
     private String name;
     private String breed;
+    private String species;
     private String age;
 
     @ManyToOne
     @JoinColumn(name = "guardian_id", nullable = false)
     private Guardian guardian;
 
-    public Pet(Long id, String name, String breed, String age, Guardian guardian) {
-        this.id = id;
+    public Pet(String name, String breed, String species, String age, Guardian guardian) {
         this.name = name;
         this.breed = breed;
+        this.species = species;
         this.age = age;
         this.guardian = guardian;
     }
@@ -46,6 +47,14 @@ public class Pet {
 
     public void setBreed(String breed) {
         this.breed = breed;
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
     }
 
     public String getAge() {
