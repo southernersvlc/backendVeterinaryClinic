@@ -4,6 +4,7 @@ import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.entities.Pet;
 import com.example.veterinary_clinic.repositories.PetRepository;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
+import com.example.veterinary_clinic.services.PetServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +18,12 @@ public class PetController {
 
     private final PetRepository petRepository;
     private final GuardianRepository guardianRepository;
+    private final PetServices petServices;
 
     public PetController(PetRepository petRepository, GuardianRepository guardianRepository) {
         this.petRepository = petRepository;
         this.guardianRepository = guardianRepository;
+        this.petServices = petServices;
     }
 
 
