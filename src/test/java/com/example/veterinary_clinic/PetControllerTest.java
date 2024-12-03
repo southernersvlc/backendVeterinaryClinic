@@ -55,7 +55,31 @@ class PetControllerTest {
     }
 
     @Test
-    void getPetById() {
+    void givenPetWithId_whenCallGetPetById_thenReturnThisPet() throws Exception {
+        Guardian guardian1 = new Guardian("Lil", "Wayne", "666333111");
+        guardianRepository.save(guardian1);
+        Pet pet1 = new Pet("Gandalf", "WatterDog", "Cat", "3", guardian1);
+        petRepository.save(pet1);
+
+        String createdPet = """
+                    {
+                        "id" : 1,
+                        "name": "Gandalf",
+                        "breed": "WatterDog",
+                        "species": "Cat",
+                        "age" : "3",
+                        "guardian_id" : "1"
+                        
+                    }
+                """;
+
+        mockMvc.perform(put("/pets/" + pet1.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(createdPet))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("Gandalf")))
+                .andExpect(jsonPath("$.breed", is("WatterDog")))
+                .andExpect(jsonPath("$.age", is("3")));
     }
 
     @Test
