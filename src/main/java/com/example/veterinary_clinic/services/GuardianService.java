@@ -25,20 +25,21 @@ public class GuardianService {
     }
 
     public GuardianResponseDTO createGuardian(GuardianRequestDTO guardianRequestDTO) {
-        Guardian guardian = GuardianMapper.toEntity(guardianRequestDTO);
-        if(guardian.getName().isEmpty() || guardian.getPhoneNumber().isEmpty() || guardian.getEmail().isEmpty() || guardian.getAddress().isEmpty()) {
+
+        if(guardianRequestDTO.name().isEmpty() || guardianRequestDTO.phoneNumber().isEmpty() || guardianRequestDTO.email().isEmpty() || guardianRequestDTO.address().isEmpty()) {
             throw new GuardianFieldsCannotByEmptyException("Fields cannot by empty");
         }
 
         String phoneNumberPattern = "^\\d{9}$";
-        if (!Pattern.matches(phoneNumberPattern, guardian.getPhoneNumber())) {
-            throw new GuardianInvalidPhoneNumberException("Phone number must have exactly 9 digits.");
+        if (!Pattern.matches(phoneNumberPattern, guardianRequestDTO.phoneNumber())) {
+            throw new GuardianInvalidPhoneNumberException("Phone number must have exactly 9 digits."); // IlegalArgument
         }
 
-        Optional<Guardian> existGuardian = guardianRepository.findByPhoneNumber(guardian.getPhoneNumber());
+        Optional<Guardian> existGuardian = guardianRepository.findByPhoneNumber(guardianRequestDTO.phoneNumber());
         if (existGuardian.isPresent())
             throw new GuardianPhoneNumberAlreadyExistsException("Guardian already exist with this phone number");
 
+        Guardian guardian = GuardianMapper.toEntity(guardianRequestDTO);
         Guardian savedGuardian = guardianRepository.save(guardian);
         return GuardianMapper.toResponseDto(savedGuardian);
     }

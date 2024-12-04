@@ -24,7 +24,7 @@ public class GuardianController {
     }
 
     @PostMapping
-    public ResponseEntity<GuardianResponseDTO> addGuardian(@Valid @RequestBody GuardianRequestDTO guardianRequestDTO) {
+    public ResponseEntity<GuardianResponseDTO> addGuardian( @RequestBody GuardianRequestDTO guardianRequestDTO) {
         GuardianResponseDTO guardianResponseDTO = guardianService.createGuardian(guardianRequestDTO);
         return new ResponseEntity<>(guardianResponseDTO, HttpStatus.CREATED);
     }
