@@ -69,7 +69,6 @@ class PetControllerTest {
                         "species": "Cat",
                         "age" : "3",
                         "guardian_id" : "1"
-                        
                     }
                 """;
 

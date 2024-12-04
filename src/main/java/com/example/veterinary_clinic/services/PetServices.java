@@ -2,8 +2,11 @@ package com.example.veterinary_clinic.services;
 
 import com.example.veterinary_clinic.dtos.PetRequest;
 import com.example.veterinary_clinic.entities.Pet;
+import com.example.veterinary_clinic.mappers.PetMapper;
 import com.example.veterinary_clinic.repositories.PetRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PetServices {
     private final PetRepository petRepository;
 
@@ -12,7 +15,7 @@ public class PetServices {
     }
 
     public Pet createPet(PetRequest petRequest){
-        Pet pet = new Pet(petRequest.name(), petRequest.breed(), petRequest.species(), petRequest.age(), petRequest.guardian());
+        Pet pet = PetMapper.toEntity(petRequest);  // could be changed into "fromRequest"
         return petRepository.save(pet);
     }
 }
