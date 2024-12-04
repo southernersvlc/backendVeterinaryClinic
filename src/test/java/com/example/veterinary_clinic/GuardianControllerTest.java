@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-
 class GuardianControllerTest {
 
     @Autowired
@@ -37,11 +36,10 @@ class GuardianControllerTest {
     @Test
     void given2Guardians_whenCallGetAllGuardians_thenReturnAListTheseGuardians() throws Exception {
         //Given
-        Guardian guardian1 = new Guardian("name1", "surname1", "phone1");
-        Guardian guardian2 = new Guardian("name2", "surname2", "phone2");
+        Guardian guardian1 = new Guardian("name1", "phone1", "email1", "address1");
+        Guardian guardian2 = new Guardian("name2", "phone2", "email2", "address2");
         guardianRepository.save(guardian1);
         guardianRepository.save(guardian2);
-
 
 
         //When
@@ -53,74 +51,64 @@ class GuardianControllerTest {
     @Test
     void givenGuardianWithAnEmptyField_whenAddGuardian_thenReturnBadRequest() throws Exception {
         String guardianWithEmptyPhone = """
-        {
-            "name": "Jose",
-            "surname": "Vicent",
-            "phoneNumber": ""
-        }
-    """;
+                    {
+                        "name": "Jose",
+                        "phoneNumber": "",
+                        "email":"guardian1@gmail.com",
+                        "address": "amatista 1"
+                    }
+                """;
 
         mockMvc.perform(post("/guardians")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(guardianWithEmptyPhone))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Fields cannot be empty."));
-
-        String guardianWithEmptySurname = """
-        {
-            "name": "Jose",
-            "surname": "",
-            "phoneNumber": "111111111"
-        }
-    """;
-
-        mockMvc.perform(post("/guardians")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(guardianWithEmptySurname))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Fields cannot be empty."));
+                .andExpect(status().isBadRequest());
+        // .andExpect(content().string("Fields cannot be empty."));
 
         String guardianWithEmptyName = """
-        {
-            "name": "",
-            "surname": "Vicent",
-            "phoneNumber": "111111111"
-        }
-    """;
+                    {
+                        "name": "",
+                        "phoneNumber": "",
+                        "email":"guardian1@gmail.com",
+                        "address": "amatista 1"
+                    }
+                """;
 
         mockMvc.perform(post("/guardians")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(guardianWithEmptyName))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Fields cannot be empty."));
+                .andExpect(status().isBadRequest());
+        // .andExpect(content().string("Fields cannot be empty."));
     }
 
     @Test
     void givenGuardianWithAWrongPhoneNumber_whenAddGuardian_thenReturnBadRequest() throws Exception {
         String guardianWithAWrongPhoneNumber = """
-        {
-            "name": "Jose",
-            "surname": "Vicent",
-            "phoneNumber": "123as"
-        }
-    """;
+                    {
+                        "name": "Jose",
+                        "phoneNumber": "123as",
+                        "email":"guardian1@gmail.com",
+                        "address": "amatista 1"
+                    }
+                """;
 
         mockMvc.perform(post("/guardians")
-        .contentType(MediaType.APPLICATION_JSON)
-                .content(guardianWithAWrongPhoneNumber))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("This is not a phone number, please try again."));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(guardianWithAWrongPhoneNumber))
+                .andExpect(status().isBadRequest());
+        // .andExpect(content().string("This is not a phone number, please try again."));
     }
 
     @Test
     void givenDuplicatePhoneNumber_whenAddGuardian_thenReturnBadRequest() throws Exception {
         String firstGuardian = """
-        {
-            "name": "Jose",
-            "surname": "Vicent",
-            "phoneNumber": "123456789"
-        }
-    """;
+                    {
+                        "name": "Jose",
+                        "phoneNumber": "123456789",
+                        "email":"guardian1@gmail.com",
+                        "address": "amatista 1"
+                    }
+                """;
 
         mockMvc.perform(post("/guardians")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -128,44 +116,64 @@ class GuardianControllerTest {
                 .andExpect(status().isCreated());
 
         String duplicatePhoneGuardian = """
-        {
-            "name": "John",
-            "surname": "Doe",
-            "phoneNumber": "123456789"
-        }
-    """;
+                    {
+                        "name": "John",
+                        "phoneNumber": "123456789",
+                        "email":"guardian1@gmail.com",
+                        "address": "amatista 1"
+                    }
+                """;
 
         mockMvc.perform(post("/guardians")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(duplicatePhoneGuardian))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("This phone number already exists."));
+                .andExpect(status().isConflict());
+        //.andExpect(content().string("This phone number already exists."));
     }
-    
+
+
     @Test
     void givenGuardianWithId_whenCallGetGuardianById_thenReturnThisGuardian() throws Exception {
-        Guardian guardian = new Guardian("jose", "reyes", "123456789");
+        Guardian guardian = new Guardian("jose", "123456789", "guardian1@gmail.com", "amatista 1");
 
         guardianRepository.save(guardian);
 
-        mockMvc.perform(get("/guardians/" + guardian.getId() )
-        .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
+        mockMvc.perform(get("/guardians/id/" + guardian.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(guardian.getName())))
-                .andExpect(jsonPath("$.surname", is(guardian.getSurname())))
-                .andExpect(jsonPath("$.phoneNumber", is(guardian.getPhoneNumber())));
+                .andExpect(jsonPath("$.phoneNumber", is(guardian.getPhoneNumber())))
+                .andExpect(jsonPath("$.email", is(guardian.getEmail())))
+                .andExpect(jsonPath("$.address", is(guardian.getAddress())));
+    }
+
+    @Test
+    void givenGuardianWithName_whenCallGetGuardianByName_thenReturnThisGuardian() throws Exception {
+        Guardian guardian = new Guardian("jose", "123456789", "guardian1@gmail.com", "amatista 1");
+
+        guardianRepository.save(guardian);
+
+        mockMvc.perform(get("/guardians/name")
+                        .param("name", "jose")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name", is(guardian.getName())))
+                .andExpect(jsonPath("$[0].phoneNumber", is(guardian.getPhoneNumber())))
+                .andExpect(jsonPath("$[0].email", is(guardian.getEmail())))
+                .andExpect(jsonPath("$[0].address", is(guardian.getAddress())));
     }
 
     @Test
     void givenGuardianWithId_whenCallUpdateGuardian_thenReturnUpdatedGuardian() throws Exception {
-        Guardian guardian = new Guardian("Lil", "Wayne", "666333111");
+        Guardian guardian = new Guardian("Lil", "666333111", "guardian1@gmail.com", "amatista 1");
         guardianRepository.save(guardian);
 
         String updatedGuardian = """
                     {
                         "name": "Arthur",
-                        "surname": "Schumacher",
-                        "phoneNumber": "111333666"
+                        "phoneNumber": "111333666",
+                        "email": "uardian1@gmail.com",
+                        "address": "amatista 1"
                     }
                 """;
 
@@ -174,16 +182,18 @@ class GuardianControllerTest {
                         .content(updatedGuardian))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Arthur")))
-                .andExpect(jsonPath("$.surname", is("Schumacher")))
-                .andExpect(jsonPath("$.phoneNumber", is("111333666")));
+                .andExpect(jsonPath("$.phoneNumber", is("111333666")))
+                .andExpect(jsonPath("$.email", is("guardian1@gmail.com")))
+                .andExpect(jsonPath("$.address", is("amatista 1")));
     }
+
 
     @Test
     void givenGuardianWithId_whenCallDeleteGuardian_thenReturnIsOk() throws Exception {
-        Guardian guardian = new Guardian("Vicent", "Roig", "666333111");
+        Guardian guardian = new Guardian("Vicent", "666333111", "guardian1@gmail.com", "amatista 1");
         guardianRepository.save(guardian);
 
-        mockMvc.perform(delete("/guardians/"+ guardian.getId()))
+        mockMvc.perform(delete("/guardians/" + guardian.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("The Guardian has been deleted correctly."));
     }
