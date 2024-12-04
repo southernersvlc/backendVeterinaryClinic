@@ -34,7 +34,6 @@ public class GuardianController {
         return guardianRepository.findAll();
     }
 
-
     @GetMapping("/id/{id}")
     public ResponseEntity<?> getGuardianById(@PathVariable Long id) {
         Optional<Guardian> optionalGuardian = guardianRepository.findById(id);
@@ -78,7 +77,6 @@ public class GuardianController {
         }
         return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.BAD_REQUEST);
     }
-
 }
 
 
