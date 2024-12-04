@@ -132,33 +132,50 @@ class GuardianControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("This phone number already exists."));
     }
-    
-  /*
-  @Test
+
+
+    @Test
     void givenGuardianWithId_whenCallGetGuardianById_thenReturnThisGuardian() throws Exception {
-        Guardian guardian = new Guardian("jose", "reyes", "123456789");
+        Guardian guardian = new Guardian("jose","123456789","guardian1@gmail.com","amatista 1");
 
         guardianRepository.save(guardian);
 
-        mockMvc.perform(get("/guardians/" + guardian.getId() )
-        .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
+        mockMvc.perform(get("/guardians/id/" + guardian.getId() )
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(guardian.getName())))
-                .andExpect(jsonPath("$.surname", is(guardian.getSurname())))
-                .andExpect(jsonPath("$.phoneNumber", is(guardian.getPhoneNumber())));
+                .andExpect(jsonPath("$.phoneNumber", is(guardian.getPhoneNumber())))
+                .andExpect(jsonPath("$.email", is(guardian.getEmail())))
+                .andExpect(jsonPath("$.address", is(guardian.getAddress())));
     }
-   */
-    /*
+
+    @Test
+    void givenGuardianWithName_whenCallGetGuardianByName_thenReturnThisGuardian() throws Exception {
+        Guardian guardian = new Guardian("jose","123456789","guardian1@gmail.com","amatista 1");
+
+        guardianRepository.save(guardian);
+
+        mockMvc.perform(get("/guardians/name")
+                        .param("name", "jose")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name", is(guardian.getName())))
+                .andExpect(jsonPath("$[0].phoneNumber", is(guardian.getPhoneNumber())))
+                .andExpect(jsonPath("$[0].email", is(guardian.getEmail())))
+                .andExpect(jsonPath("$[0].address", is(guardian.getAddress())));
+    }
+
      @Test
     void givenGuardianWithId_whenCallUpdateGuardian_thenReturnUpdatedGuardian() throws Exception {
-        Guardian guardian = new Guardian("Lil", "Wayne", "666333111");
+        Guardian guardian = new Guardian("Lil", "666333111", "guardian1@gmail.com","amatista 1");
         guardianRepository.save(guardian);
 
         String updatedGuardian = """
                     {
                         "name": "Arthur",
-                        "surname": "Schumacher",
-                        "phoneNumber": "111333666"
+                        "phoneNumber": "111333666",
+                        "email": "uardian1@gmail.com",
+                        "address": "amatista 1"
                     }
                 """;
 
@@ -167,21 +184,22 @@ class GuardianControllerTest {
                         .content(updatedGuardian))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Arthur")))
-                .andExpect(jsonPath("$.surname", is("Schumacher")))
-                .andExpect(jsonPath("$.phoneNumber", is("111333666")));
+                .andExpect(jsonPath("$.phoneNumber", is("111333666")))
+                .andExpect(jsonPath("$.email", is("guardian1@gmail.com")))
+                .andExpect(jsonPath("$.address", is("amatista 1")));
     }
-     */
 
-   /*
+
+
    @Test
     void givenGuardianWithId_whenCallDeleteGuardian_thenReturnIsOk() throws Exception {
-        Guardian guardian = new Guardian("Vicent", "Roig", "666333111");
+        Guardian guardian = new Guardian("Vicent", "666333111", "guardian1@gmail.com", "amatista 1");
         guardianRepository.save(guardian);
 
         mockMvc.perform(delete("/guardians/"+ guardian.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("The Guardian has been deleted correctly."));
     }
-    */
+
 
 }
