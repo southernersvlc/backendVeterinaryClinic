@@ -10,7 +10,7 @@ public interface GuardianRepository extends JpaRepository<Guardian, Long> {
 
     Optional<Guardian> findById(Long id);
 
-    boolean existsByPhoneNumber(String phoneNumber);
+    Optional<Guardian> findByPhoneNumber(String phoneNumber);
 
     List<Guardian> findByNameIgnoreCaseContaining(String name);
 }

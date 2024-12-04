@@ -1,8 +1,11 @@
 package com.example.veterinary_clinic.controllers;
 
+import com.example.veterinary_clinic.dtos.GuardianRequestDTO;
+import com.example.veterinary_clinic.dtos.GuardianResponseDTO;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.services.GuardianService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,23 +24,9 @@ public class GuardianController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addGuardian(@RequestBody Guardian guardian) {
-        String newPhoneNumber = guardian.getPhoneNumber();
-
-        if (guardian.getName().isEmpty() || guardian.getPhoneNumber().isEmpty()) {
-            return new ResponseEntity<>("Fields cannot be empty.", HttpStatus.BAD_REQUEST);
-        }
-
-        if (guardianRepository.existsByPhoneNumber(guardian.getPhoneNumber())) {
-            return new ResponseEntity<>("This phone number already exists.", HttpStatus.BAD_REQUEST);
-        }
-
-        if (!guardian.isValidPhoneNumber(newPhoneNumber)) {
-            return new ResponseEntity<>("This is not a phone number, please try again.", HttpStatus.BAD_REQUEST);
-        }
-
-        guardianRepository.save(guardian);
-        return ResponseEntity.status(HttpStatus.CREATED).body(guardian);
+    public ResponseEntity<GuardianResponseDTO> addGuardian(@Valid @RequestBody GuardianRequestDTO guardianRequestDTO) {
+        GuardianResponseDTO guardianResponseDTO = guardianService.createGuardian(guardianRequestDTO);
+        return new ResponseEntity<>(guardianResponseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping

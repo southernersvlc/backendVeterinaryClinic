@@ -18,9 +18,9 @@ public class Guardian {
 
     @OneToMany(mappedBy = "guardian", cascade = CascadeType.ALL)
     private List<Pet> petsList = new ArrayList<>();
+
     public Guardian() {
     }
-
 
     public Guardian(String name, String phoneNumber, String email, String address) {
         this.name = name;
@@ -47,15 +47,6 @@ public class Guardian {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public static boolean isValidPhoneNumber(String phoneNumber){
-        String pattern = "^\\d{9}$";
-        return  phoneNumber.matches(pattern);
-    }
-
-    public void setId(Long guardianId) {
-        this.id = id;
     }
 
     public String getAddress() {
