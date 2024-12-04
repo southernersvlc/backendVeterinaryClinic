@@ -155,13 +155,14 @@ class GuardianControllerTest {
 
         guardianRepository.save(guardian);
 
-        mockMvc.perform(get("/guardians/name/" + guardian.getName() )
+        mockMvc.perform(get("/guardians/name")
+                        .param("name", "jose")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is(guardian.getName())))
-                .andExpect(jsonPath("$.phoneNumber", is(guardian.getPhoneNumber())))
-                .andExpect(jsonPath("$.email", is(guardian.getEmail())))
-                .andExpect(jsonPath("$.address", is(guardian.getAddress())));
+                .andExpect(jsonPath("$[0].name", is(guardian.getName())))
+                .andExpect(jsonPath("$[0].phoneNumber", is(guardian.getPhoneNumber())))
+                .andExpect(jsonPath("$[0].email", is(guardian.getEmail())))
+                .andExpect(jsonPath("$[0].address", is(guardian.getAddress())));
     }
 
      @Test
