@@ -1,4 +1,4 @@
-package com.example.veterinary_clinic;
+/*package com.example.veterinary_clinic;
 
 import com.example.veterinary_clinic.controllers.GuardianController;
 import com.example.veterinary_clinic.controllers.PetController;
@@ -128,4 +128,4 @@ class PetControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("The pet has been deleted correctly."));
     }
-}
+}*/

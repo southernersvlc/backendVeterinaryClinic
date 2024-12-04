@@ -46,18 +46,9 @@ public class PetController {
 
     @PostMapping
     public ResponseEntity<Pet> addPet(@RequestBody PetRequest petRequest) {//@RequestParam Long guardianId
-        petServices.createPet(petRequest);
-        return new ResponseEntity<>(new Pet(), HttpStatus.CREATED);
-
-        /*Optional<Guardian> optionalGuardian = guardianRepository.findById(guardianId);
-        if (!optionalGuardian.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The guardian does not exist with this id" + guardianId);
-        }
-        Guardian guardian = optionalGuardian.get();
-        petRequest.pet.setGuardian(guardian);
-        Pet newPet = petRepository.save(pet); */
-    }
-
+        Pet pet = petServices.createPet(petRequest);
+        return new ResponseEntity<>(pet, HttpStatus.CREATED);
+}
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePet(@PathVariable Long id, @RequestBody Pet pet) {
@@ -69,7 +60,7 @@ public class PetController {
             petToUpdate.setName(pet.getName());
             petToUpdate.setAge(pet.getAge());
             petToUpdate.setBreed(pet.getBreed());
-            petToUpdate.setSpecies(pet.getSpecies());
+            //petToUpdate.setSpecies(pet.getSpecies());
 
             petRepository.save(petToUpdate);
 

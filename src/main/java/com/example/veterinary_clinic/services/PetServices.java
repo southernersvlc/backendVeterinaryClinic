@@ -22,12 +22,12 @@ public class PetServices {
     }
 
     public Pet createPet(PetRequest petRequest){
-        validatePetRequest(petRequest);
-        Guardian guardian = guardianRepository.findById(petRequest.guardian().getId())
+        Guardian guardian = guardianRepository.findById(petRequest.guardianId())
                 .orElseThrow(() -> new PetNotFoundException("Guardian not found."));
 
-
-        Pet pet = new Pet(petRequest.name(), petRequest.breed(), petRequest.species(), petRequest.age(), guardian);  // could be changed into "toEntity"
+        System.out.println("Hi" + petRequest);
+        Pet pet = new Pet(petRequest.name(), petRequest.breed(), petRequest.age(), guardian);  // could be changed into "toEntity"
+        System.out.println(pet);
         return petRepository.save(pet);
     }
 
@@ -39,16 +39,16 @@ public class PetServices {
 
         if (petRequest.breed() == null || petRequest.breed().isEmpty()){
             String breed = (petRequest.breed() == null || petRequest.breed().isEmpty()) ? "unknown" : petRequest.breed();
-            PetRequest updatedPetRequest = new PetRequest(petRequest.id(), petRequest.name(), breed, petRequest.species(), petRequest.age(), petRequest.guardian());
+            //PetRequest updatedPetRequest = new PetRequest(petRequest.id(), petRequest.name(), breed, petRequest.age(), petRequest.guardianId());
         }
 
-        if (petRequest.species() != Pet.Species.CAT || petRequest.species() != Pet.Species.DOG){
+        /*if (petRequest.species() != Pet.Species.CAT || petRequest.species() != Pet.Species.DOG){
             throw new IllegalArgumentException("Pet species must be CAT or DOG.");
-        }
+        }*/
 
-        if (petRequest.age() == null || petRequest.age().isEmpty()){
+        /*if (petRequest.age() == null || petRequest.age().isEmpty()){
             throw new IllegalArgumentException("Pet age can not be empty.");
-        }
+        }*/
 
     }
 }
