@@ -43,8 +43,8 @@ class PetControllerTest {
     void given2Pets_whenCallGetAllPets_thenReturnAListWithThesePets() throws Exception {
         Guardian guardian1 = new Guardian("name1", "surname1", "phone1");
         guardianRepository.save(guardian1);
-        Pet pet1 = new Pet("Sauron", "Labrador", "Dog", "10", guardian1);
-        Pet pet2 = new Pet("Pepa", "", "Cat", "7",guardian1);
+        Pet pet1 = new Pet("Sauron", "Labrador", Pet.Species.DOG, "10", guardian1);
+        Pet pet2 = new Pet("Pepa", "", Pet.Species.CAT, "7",guardian1);
         petRepository.save(pet1);
         petRepository.save(pet2);
 
@@ -58,7 +58,7 @@ class PetControllerTest {
     void givenPetWithId_whenCallGetPetById_thenReturnThisPet() throws Exception {
         Guardian guardian1 = new Guardian("Lil", "Wayne", "666333111");
         guardianRepository.save(guardian1);
-        Pet pet1 = new Pet("Gandalf", "WatterDog", "Cat", "3", guardian1);
+        Pet pet1 = new Pet("Gandalf", "WatterDog", Pet.Species.CAT, "3", guardian1);
         petRepository.save(pet1);
 
         String createdPet = """
@@ -86,7 +86,7 @@ class PetControllerTest {
     void givenNewPet_whenCallAddPet_thenPetIsSavedInRepo() throws Exception {
         Guardian guardian1 = new Guardian("Lil", "Wayne", "666333111");
         guardianRepository.save(guardian1);
-        Pet pet1 = new Pet("Rambo", "StrikeDog", "Cat", "3", guardian1);
+        Pet pet1 = new Pet("Rambo", "StrikeDog", Pet.Species.CAT, "3", guardian1);
 
         mockMvc.perform(post("/pets").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -97,7 +97,7 @@ class PetControllerTest {
     void givenAPet_whenCallUpdatePet_thenThisPetIsUpdated() throws Exception {
         Guardian guardian1 = new Guardian("Lil", "Wayne", "666333111");
         guardianRepository.save(guardian1);
-        Pet pet1 = new Pet("Rambo", "StrikeDog", "Cat", "3", guardian1);
+        Pet pet1 = new Pet("Rambo", "StrikeDog", Pet.Species.CAT, "3", guardian1);
         petRepository.save(pet1);
         String petToUpdate ="""
              {
@@ -122,7 +122,7 @@ class PetControllerTest {
     void givenAPetWithId_whenCallDeletePet_thenDeleteThisPet() throws Exception {
         Guardian guardian1 = new Guardian("Paco", "Roig", "666333111");
         guardianRepository.save(guardian1);
-        Pet pet1 = new Pet("Charmander", "PokemonDog", "Dog", "11", guardian1);
+        Pet pet1 = new Pet("Charmander", "PokemonDog", Pet.Species.DOG, "11", guardian1);
         petRepository.save(pet1);
 
         mockMvc.perform(delete("/pets/" + pet1.getId()))

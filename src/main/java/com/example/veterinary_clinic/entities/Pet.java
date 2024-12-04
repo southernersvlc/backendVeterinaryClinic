@@ -11,14 +11,20 @@ public class Pet {
     private Long id;
     private String name;
     private String breed;
-    private String species;
+    @Enumerated(EnumType.STRING)
+    private Species species;
     private String age;
 
     @ManyToOne
     @JoinColumn(name = "guardian_id", nullable = false)
     private Guardian guardian;
 
-    public Pet(String name, String breed, String species, String age, Guardian guardian) {
+    public enum Species{
+        DOG,
+        CAT
+    }
+
+    public Pet(String name, String breed, Species species, String age, Guardian guardian) {
         this.name = name;
         this.breed = breed;
         this.species = species;
@@ -49,11 +55,11 @@ public class Pet {
         this.breed = breed;
     }
 
-    public String getSpecies() {
+    public Species getSpecies() {
         return species;
     }
 
-    public void setSpecies(String species) {
+    public void setSpecies(Species species) {
         this.species = species;
     }
 
