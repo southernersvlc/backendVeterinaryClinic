@@ -1,5 +1,6 @@
 package com.example.veterinary_clinic.repositories;
 
+import com.example.veterinary_clinic.dtos.GuardianResponseDTO;
 import com.example.veterinary_clinic.entities.Guardian;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,5 +13,5 @@ public interface GuardianRepository extends JpaRepository<Guardian, Long> {
 
     Optional<Guardian> findByPhoneNumber(String phoneNumber);
 
-    List<Guardian> findByNameIgnoreCaseContaining(String name);
+    List<GuardianResponseDTO> findByNameIgnoreCaseContaining(String name);
 }

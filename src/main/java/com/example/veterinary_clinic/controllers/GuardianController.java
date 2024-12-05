@@ -45,9 +45,9 @@ public class GuardianController {
     }
 
     @GetMapping("/name")
-    public ResponseEntity<?> getGuardianByName(@RequestParam String name) {
-        List<Guardian> guardians = guardianService.findByNameIgnoreCaseContaining(name);
-        return new ResponseEntity<>(guardians, HttpStatus.OK);
+    public List<GuardianResponseDTO> getGuardianByName(@RequestParam String name) {
+        List<GuardianResponseDTO> guardians = guardianService.findByNameIgnoreCaseContaining(name);
+        return new ResponseEntity<>(guardians, HttpStatus.OK).getBody();
     }
 
     @PutMapping("/{id}")

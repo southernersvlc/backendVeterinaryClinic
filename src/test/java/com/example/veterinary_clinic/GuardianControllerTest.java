@@ -63,7 +63,6 @@ class GuardianControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(guardianWithEmptyPhone))
                 .andExpect(status().isBadRequest());
-        // .andExpect(content().string("Fields cannot be empty."));
 
         String guardianWithEmptyName = """
                     {
@@ -78,7 +77,6 @@ class GuardianControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(guardianWithEmptyName))
                 .andExpect(status().isBadRequest());
-        // .andExpect(content().string("Fields cannot be empty."));
     }
 
     @Test
@@ -96,7 +94,6 @@ class GuardianControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(guardianWithAWrongPhoneNumber))
                 .andExpect(status().isBadRequest());
-        // .andExpect(content().string("This is not a phone number, please try again."));
     }
 
     @Test
@@ -128,7 +125,6 @@ class GuardianControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(duplicatePhoneGuardian))
                 .andExpect(status().isConflict());
-        //.andExpect(content().string("This phone number already exists."));
     }
 
 
@@ -165,14 +161,14 @@ class GuardianControllerTest {
 
     @Test
     void givenGuardianWithId_whenCallUpdateGuardian_thenReturnUpdatedGuardian() throws Exception {
-        Guardian guardian = new Guardian("Lil", "666333111", "guardian1@gmail.com", "amatista 1");
+        Guardian guardian = new Guardian("Lil", "666333111", "amatista 1", "guardian1@gmail.com");
         guardianRepository.save(guardian);
 
         String updatedGuardian = """
                     {
                         "name": "Arthur",
                         "phoneNumber": "111333666",
-                        "email": "uardian1@gmail.com",
+                        "email": "guardian1@gmail.com",
                         "address": "amatista 1"
                     }
                 """;

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Guardian {
@@ -22,7 +23,15 @@ public class Guardian {
     public Guardian() {
     }
 
-    public Guardian(String name, String phoneNumber, String email, String address) {
+    public Guardian(String name, String phoneNumber, String address, String email) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+    }
+
+    public Guardian(Long id, String name, String phoneNumber, String address, String email) {
+        this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -63,5 +72,30 @@ public class Guardian {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Guardian guardian = (Guardian) o;
+        return Objects.equals(id, guardian.id) && Objects.equals(name, guardian.name) && Objects.equals(phoneNumber, guardian.phoneNumber) && Objects.equals(email, guardian.email) && Objects.equals(address, guardian.address) && Objects.equals(petsList, guardian.petsList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, phoneNumber, email, address, petsList);
+    }
+
+    @Override
+    public String toString() {
+        return "Guardian{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", petsList=" + petsList +
+                '}';
     }
 }

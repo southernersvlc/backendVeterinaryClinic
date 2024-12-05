@@ -9,8 +9,8 @@ public class GuardianMapper {
         return new Guardian(
                 guardianRequestDTO.name(),
                 guardianRequestDTO.phoneNumber(),
-                guardianRequestDTO.email(),
-                guardianRequestDTO.address());
+                guardianRequestDTO.address(),
+                guardianRequestDTO.email());
     }
 
     public static GuardianResponseDTO toResponseDto(Guardian guardian) {
@@ -18,7 +18,7 @@ public class GuardianMapper {
                 guardian.getId(),
                 guardian.getName(),
                 guardian.getPhoneNumber(),
-                guardian.getEmail(),
-                guardian.getAddress());
+                guardian.getAddress(),
+                guardian.getEmail());
     }
 }
