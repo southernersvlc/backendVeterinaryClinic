@@ -5,6 +5,7 @@ import com.example.veterinary_clinic.dtos.GuardianResponseDTO;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.services.GuardianService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,16 +15,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/guardians")
 public class GuardianController {
-    private final GuardianRepository guardianRepository;
     private final GuardianService guardianService;
 
-    public GuardianController(GuardianRepository guardianRepository, GuardianService guardianService) {
-        this.guardianRepository = guardianRepository;
+    public GuardianController(GuardianService guardianService) {
         this.guardianService = guardianService;
     }
 
     @PostMapping
-    public ResponseEntity<GuardianResponseDTO> addGuardian( @RequestBody GuardianRequestDTO guardianRequestDTO) {
+    public ResponseEntity<GuardianResponseDTO> addGuardian(@RequestBody @Valid GuardianRequestDTO guardianRequestDTO) {
         GuardianResponseDTO guardianResponseDTO = guardianService.createGuardian(guardianRequestDTO);
         return new ResponseEntity<>(guardianResponseDTO, HttpStatus.CREATED);
     }
@@ -47,17 +46,16 @@ public class GuardianController {
     }
 
    @PutMapping("/{id}")
-    public GuardianResponseDTO updateGuardian(@PathVariable Long id, @RequestBody GuardianRequestDTO guardianRequestDTO) {
+    public GuardianResponseDTO updateGuardian(@PathVariable Long id, @RequestBody @Valid GuardianRequestDTO guardianRequestDTO) {
        GuardianResponseDTO guardianResponseDTO = guardianService.updateGuardianById(id, guardianRequestDTO);
        return new ResponseEntity<>(guardianResponseDTO, HttpStatus.OK).getBody();
     }
 
     @DeleteMapping("/{id}")
-    public void  deleteGuardian(@PathVariable Long id) {
+    public ResponseEntity<String> deleteGuardian(@PathVariable Long id) {
         guardianService.deleteGuardianById(id);
-        new ResponseEntity<>("The guardian deleted", HttpStatus.OK);
+        return new ResponseEntity<>("The guardian has been eliminated", HttpStatus.OK);
     }
-
 }
 
 

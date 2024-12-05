@@ -3,10 +3,7 @@ package com.example.veterinary_clinic.services;
 import com.example.veterinary_clinic.dtos.GuardianRequestDTO;
 import com.example.veterinary_clinic.dtos.GuardianResponseDTO;
 import com.example.veterinary_clinic.entities.Guardian;
-import com.example.veterinary_clinic.exceptions.VeterinaryFieldsCannotByEmptyException;
-import com.example.veterinary_clinic.exceptions.VeterinaryInvalidPhoneNumberException;
-import com.example.veterinary_clinic.exceptions.VeterinaryNotFoundException;
-import com.example.veterinary_clinic.exceptions.VeterinaryPhoneNumberAlreadyExistsException;
+import com.example.veterinary_clinic.exceptions.*;
 import com.example.veterinary_clinic.mapper.GuardianMapper;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import org.springframework.stereotype.Service;
@@ -25,19 +22,14 @@ public class GuardianService {
     }
 
     public GuardianResponseDTO createGuardian(GuardianRequestDTO guardianRequestDTO) {
-
-        if(guardianRequestDTO.name().isEmpty() || guardianRequestDTO.phoneNumber().isEmpty() || guardianRequestDTO.email().isEmpty() || guardianRequestDTO.address().isEmpty()) {
-            throw new VeterinaryFieldsCannotByEmptyException("Fields cannot by empty");
-        }
-
         String phoneNumberPattern = "^\\d{9}$";
         if (!Pattern.matches(phoneNumberPattern, guardianRequestDTO.phoneNumber())) {
-            throw new VeterinaryInvalidPhoneNumberException("Phone number must have exactly 9 digits."); // IlegalArgument
+            throw new VeterinaryInvalidPhoneNumberException("Phone number must have exactly 9 digits.");
         }
 
         Optional<Guardian> existGuardian = guardianRepository.findByPhoneNumber(guardianRequestDTO.phoneNumber());
         if (existGuardian.isPresent())
-            throw new VeterinaryPhoneNumberAlreadyExistsException("Guardian already exist with this phone number");
+            throw new VeterinaryExistingPhoneNumberException("Guardian already exist with this phone number");
 
         Guardian guardian = GuardianMapper.toEntity(guardianRequestDTO);
         Guardian savedGuardian = guardianRepository.save(guardian);
@@ -48,7 +40,7 @@ public class GuardianService {
         List<Guardian> guardianList = guardianRepository.findAll();
 
         if(guardianList.isEmpty()) {
-           throw new VeterinaryNotFoundException("No existe ningún guardian para mostrar");
+           throw new VeterinaryNotFoundException("There is no guardian to show");
         }
         return guardianList;
     }
@@ -74,10 +66,6 @@ public class GuardianService {
     }
 
     public GuardianResponseDTO updateGuardianById(Long id, GuardianRequestDTO guardianRequestDTO) {
-
-        if(guardianRequestDTO.name().isEmpty() || guardianRequestDTO.phoneNumber().isEmpty() || guardianRequestDTO.email().isEmpty() || guardianRequestDTO.address().isEmpty()) {
-            throw new VeterinaryFieldsCannotByEmptyException("Fields cannot by empty");
-        }
         Optional<Guardian> optionalGuardian = guardianRepository.findById(id);
 
         if(optionalGuardian.isPresent()) {

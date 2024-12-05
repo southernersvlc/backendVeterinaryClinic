@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
 
@@ -45,6 +46,28 @@ class GuardianServiceTest {
         assertEquals(expectedGuardianResponse, guardianResponseDTO);
     }
 
+
+    @Test
+    void findById() {
+        //GIVEN
+        GuardianRequestDTO guardianRequestDTO = new GuardianRequestDTO("some-name", "123456789", "some-address", "some-email@email.com");
+        GuardianService guardianService = new GuardianService(guardianRepository);
+        Guardian findGuardian = new Guardian("some-name", "123456789", "some-address", "some-email@email.com");
+
+        //MOCK
+        Guardian expectedGuardian = new Guardian(1L,"some-name", "123456789", "some-address", "some-email@email.com");
+        GuardianResponseDTO expectedGuardianResponse = GuardianMapper.toResponseDto(expectedGuardian);
+        Mockito.when(guardianRepository.findById(1L)).thenReturn(Optional.of(expectedGuardian));
+
+        //WHEN
+        GuardianResponseDTO guardianResponseDTO = guardianService.findById(1L);
+
+        //THEN
+        verify(guardianRepository).findById(1L);
+        assertEquals(expectedGuardianResponse, guardianResponseDTO);
+    }
+
+
     @Test
     void should_findAGuardianByAValidName() {
         //GIVEN
@@ -52,7 +75,7 @@ class GuardianServiceTest {
         GuardianService guardianService = new GuardianService(guardianRepository);
 
         //MOCK
-        Guardian expectedGuardian = new Guardian(1L,expectedGuardianName, "123456789", "some-address", "some-email@email.com");
+        Guardian expectedGuardian = new Guardian(1L,expectedGuardianName, "123456789", "some-email@email.com", "some-address");
         GuardianResponseDTO expectedGuardianResponse = GuardianMapper.toResponseDto(expectedGuardian);
         List<GuardianResponseDTO> expectedResultList = Collections.singletonList(expectedGuardianResponse);
         Mockito.when(guardianRepository.findByNameIgnoreCaseContaining(expectedGuardianName)).thenReturn(expectedResultList);
