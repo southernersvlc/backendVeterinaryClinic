@@ -1,7 +1,6 @@
 package com.example.veterinary_clinic.controllers;
 
 import com.example.veterinary_clinic.dtos.PetRequest;
-import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.entities.Pet;
 import com.example.veterinary_clinic.exceptions.PetNotFoundException;
 import com.example.veterinary_clinic.repositories.PetRepository;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/pets")
@@ -49,26 +47,16 @@ public class PetController {
     public ResponseEntity<Pet> addPet(@RequestBody PetRequest petRequest) {//@RequestParam Long guardianId
         Pet pet = petServices.createPet(petRequest);
         return new ResponseEntity<>(pet, HttpStatus.CREATED);
-}
+    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePet(@PathVariable Long id, @RequestBody Pet pet) {
-
-        Optional<Pet> optionalPeToUpdate = petRepository.findById(id);
-
-        if (optionalPeToUpdate.isPresent()) {
-            Pet petToUpdate = optionalPeToUpdate.get();
-            petToUpdate.setName(pet.getName());
-            petToUpdate.setAge(pet.getAge());
-            petToUpdate.setBreed(pet.getBreed());
-            petToUpdate.setSpecies(pet.getSpecies());
-
-            petRepository.save(petToUpdate);
-
-            return new ResponseEntity<>(petToUpdate, HttpStatus.OK);
+    public ResponseEntity<?> updatePet(@PathVariable Long id, @RequestBody PetRequest petRequest) {
+        try {
+            Pet modifiedPet = petServices.modifyPet(id, petRequest);
+            return new ResponseEntity<>(modifiedPet, HttpStatus.OK);
+        } catch (PetNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")

@@ -55,6 +55,24 @@ public class PetServices {
         }
     }
 
+    public Pet modifyPet(Long id, PetRequest petRequest) {
+        Pet existingPet = petRepository.findById(id)
+                .orElseThrow(() -> new PetNotFoundException("The pet with id " + id + " does not exist."));
+
+        if (petRequest.getGuardianId() != null) {
+            Guardian guardian = guardianRepository.findById(petRequest.getGuardianId())
+                    .orElseThrow(() -> new PetNotFoundException("Owner with id " + petRequest.getGuardianId() + " not found."));
+            existingPet.setGuardian(guardian);
+        }
+
+        existingPet.setName(petRequest.getName());
+        existingPet.setAge(petRequest.getAge());
+        existingPet.setBreed(petRequest.getBreed());
+
+        return petRepository.save(existingPet);
+    }
+
+
     private void validatePetRequest(PetRequest petRequest){
         if (petRequest.name() == null || petRequest.name().isEmpty()){
             throw new IllegalArgumentException("Pet name can not be empty.");
