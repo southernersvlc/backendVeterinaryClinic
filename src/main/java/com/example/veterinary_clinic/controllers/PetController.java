@@ -30,7 +30,8 @@ public class PetController {
 
     @GetMapping()
     public List<Pet> getAllPets() {
-        return petRepository.findAll();
+        List<Pet> allPets = petServices.listAllPets();
+        return allPets;
     }
 
     @GetMapping("/{id}")

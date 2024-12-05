@@ -10,6 +10,7 @@ import com.example.veterinary_clinic.repositories.PetRepository;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.plugins.jpeg.JPEGQTable;
+import java.util.List;
 
 @Service
 public class PetServices {
@@ -22,7 +23,7 @@ public class PetServices {
     }
 
     public Pet createPet(PetRequest petRequest) {
-    validatePetRequest(petRequest);
+        validatePetRequest(petRequest);
         Guardian guardian = guardianRepository.findById(petRequest.guardianId())
                 .orElseThrow(() -> new PetNotFoundException("Guardian not found."));
 
@@ -30,6 +31,11 @@ public class PetServices {
         Pet pet = new Pet(petRequest.name(), petRequest.breed(), petRequest.species(), petRequest.age(), guardian);  // could be changed into "toEntity"
         System.out.println(pet);
         return petRepository.save(pet);
+    }
+
+
+    public List<Pet> listAllPets (){
+        return petRepository.findAll();
     }
 
     private void validatePetRequest(PetRequest petRequest){
@@ -41,4 +47,6 @@ public class PetServices {
             throw new IllegalArgumentException("Pet age can not be empty.");
         }
     }
+
+
 }
