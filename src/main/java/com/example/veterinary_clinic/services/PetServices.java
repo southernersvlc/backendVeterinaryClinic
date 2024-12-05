@@ -40,7 +40,12 @@ public class PetServices {
     }
 
     public List<Pet> listAllPets (){
-        return petRepository.findAll();
+        List<Pet> petList = petRepository.findAll();
+
+        if(petList.isEmpty()) {
+            throw new VeterinaryNotFoundException("There is no guardian to show");
+        }
+        return petList;
     }
 
     public Pet showPetById(Long id) {

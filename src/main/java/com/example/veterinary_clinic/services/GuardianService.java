@@ -8,9 +8,11 @@ import com.example.veterinary_clinic.mappers.GuardianMapper;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class GuardianService {
@@ -36,13 +38,18 @@ public class GuardianService {
         return GuardianMapper.toResponseDto(savedGuardian);
     }
 
-    public List<Guardian> findAll() {
+    public List<GuardianResponseDTO> findAll() {
         List<Guardian> guardianList = guardianRepository.findAll();
+        List<GuardianResponseDTO> responseList = new java.util.ArrayList<>(Collections.emptyList());
+        guardianList.forEach(guardian -> {
+            GuardianResponseDTO guardianResponseDTO = GuardianMapper.toResponseDto(guardian);
+            responseList.add(guardianResponseDTO);
+        });
 
-        if(guardianList.isEmpty()) {
-           throw new VeterinaryNotFoundException("There is no guardian to show");
+        if(responseList.isEmpty()) {
+           throw new VeterinaryNotFoundException("There is not guardian to show");
         }
-        return guardianList;
+        return responseList;
     }
 
     public GuardianResponseDTO findById(Long id) {

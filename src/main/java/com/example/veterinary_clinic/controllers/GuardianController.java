@@ -28,8 +28,8 @@ public class GuardianController {
     }
 
     @GetMapping
-    public List<Guardian> getAllGuardians() {
-        List<Guardian> guardianList = guardianService.findAll();
+    public List<GuardianResponseDTO> getAllGuardians() {
+        List<GuardianResponseDTO> guardianList = guardianService.findAll();
         return new ResponseEntity<>(guardianList, HttpStatus.OK).getBody();
     }
 
