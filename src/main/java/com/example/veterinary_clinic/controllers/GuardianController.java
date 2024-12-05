@@ -68,9 +68,9 @@ public class GuardianController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteGuardian(@PathVariable Long id) {
+    public void  deleteGuardian(@PathVariable Long id) {
         guardianService.deleteGuardianById(id);
-        return new ResponseEntity<>( "The guardian deleted",HttpStatus.OK);
+        new ResponseEntity<>("The guardian deleted", HttpStatus.OK);
     }
 
 }
