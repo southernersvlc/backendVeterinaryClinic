@@ -26,7 +26,7 @@ public class PetServices {
                 .orElseThrow(() -> new PetNotFoundException("Guardian not found."));
 
         System.out.println("Hi" + petRequest);
-        Pet pet = new Pet(petRequest.name(), petRequest.breed(), petRequest.age(), guardian);  // could be changed into "toEntity"
+        Pet pet = new Pet(petRequest.name(), petRequest.breed(), petRequest.species(), petRequest.age(), guardian);  // could be changed into "toEntity"
         System.out.println(pet);
         return petRepository.save(pet);
     }

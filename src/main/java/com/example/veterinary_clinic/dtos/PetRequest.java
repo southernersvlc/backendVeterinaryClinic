@@ -6,7 +6,7 @@ import com.example.veterinary_clinic.entities.Pet;
 public record PetRequest(
         String name,
         String breed,
-        //Pet.Species species,
+        String species,
         String age,
         Long guardianId
 ) {
