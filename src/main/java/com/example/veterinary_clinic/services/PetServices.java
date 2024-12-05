@@ -7,10 +7,13 @@ import com.example.veterinary_clinic.exceptions.PetNotFoundException;
 import com.example.veterinary_clinic.mappers.PetMapper;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.repositories.PetRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.plugins.jpeg.JPEGQTable;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PetServices {
@@ -36,6 +39,11 @@ public class PetServices {
 
     public List<Pet> listAllPets (){
         return petRepository.findAll();
+    }
+
+    public Pet showPetById(Long id) {
+        return petRepository.findById(id)
+                .orElseThrow(() -> new PetNotFoundException("Pet with ID " + id + " not found."));
     }
 
     private void validatePetRequest(PetRequest petRequest){

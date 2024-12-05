@@ -2,6 +2,8 @@ package com.example.veterinary_clinic.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Optional;
+
 @Entity
 
 public class Pet {
@@ -27,6 +29,9 @@ public class Pet {
     }
 
     public Pet() {
+    }
+
+    public Pet(Optional<Pet> byId) {
     }
 
     public Long getId() {

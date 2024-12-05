@@ -3,6 +3,7 @@ package com.example.veterinary_clinic.controllers;
 import com.example.veterinary_clinic.dtos.PetRequest;
 import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.entities.Pet;
+import com.example.veterinary_clinic.exceptions.PetNotFoundException;
 import com.example.veterinary_clinic.repositories.PetRepository;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.services.PetServices;
@@ -36,13 +37,12 @@ public class PetController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getPetById(@PathVariable Long id) {
-        Optional<Pet> optionalPet = petRepository.findById(id);
-
-        if (optionalPet.isPresent()) {
-            return new ResponseEntity<>(optionalPet.get(), HttpStatus.OK);
+        try {
+            Pet pet = petServices.showPetById(id);
+            return new ResponseEntity<>(pet, HttpStatus.OK);
+        } catch (PetNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>("This Id does not belong to any pet.", HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
