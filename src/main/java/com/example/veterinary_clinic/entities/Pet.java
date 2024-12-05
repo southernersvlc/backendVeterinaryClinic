@@ -20,7 +20,7 @@ public class Pet {
 
     public Pet(String name, String breed, String species,String age, Guardian guardian) {
         this.name = name;
-        this.breed = breed;
+        this.setBreed(breed); //set unknown for an empty field
         this.species = species;
         this.age = age;
         this.guardian = guardian;
@@ -46,8 +46,7 @@ public class Pet {
     }
 
     public void setBreed(String breed) {
-        this.breed = breed;
-        if (breed == null || breed.isEmpty()) this.breed = "unknown"; // check
+        this.breed = (breed == null || breed.isEmpty()) ? "unknown" : breed;
     }
 
     public String getSpecies() {
