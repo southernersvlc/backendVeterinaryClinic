@@ -74,6 +74,10 @@ public class Pet {
         return guardian;
     }
 
+    public Long getGuardianId() {
+        return this.getGuardianId();
+    }
+
     public void setGuardian(Guardian guardian) {
         this.guardian = guardian;
     }
