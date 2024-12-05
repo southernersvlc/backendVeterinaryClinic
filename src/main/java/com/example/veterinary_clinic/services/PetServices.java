@@ -21,7 +21,8 @@ public class PetServices {
         this.guardianRepository = guardianRepository;
     }
 
-    public Pet createPet(PetRequest petRequest){
+    public Pet createPet(PetRequest petRequest) {
+    validatePetRequest(petRequest);
         Guardian guardian = guardianRepository.findById(petRequest.guardianId())
                 .orElseThrow(() -> new PetNotFoundException("Guardian not found."));
 
@@ -31,24 +32,13 @@ public class PetServices {
         return petRepository.save(pet);
     }
 
-    private void validatePetRequest(PetRequest petRequest) {
-
+    private void validatePetRequest(PetRequest petRequest){
         if (petRequest.name() == null || petRequest.name().isEmpty()){
             throw new IllegalArgumentException("Pet name can not be empty.");
         }
 
-        if (petRequest.breed() == null || petRequest.breed().isEmpty()){
-            String breed = (petRequest.breed() == null || petRequest.breed().isEmpty()) ? "unknown" : petRequest.breed();
-            //PetRequest updatedPetRequest = new PetRequest(petRequest.id(), petRequest.name(), breed, petRequest.age(), petRequest.guardianId());
-        }
-
-        /*if (petRequest.species() != Pet.Species.CAT || petRequest.species() != Pet.Species.DOG){
-            throw new IllegalArgumentException("Pet species must be CAT or DOG.");
-        }*/
-
-        /*if (petRequest.age() == null || petRequest.age().isEmpty()){
+        if (petRequest.age() == null || petRequest.age().isEmpty()){
             throw new IllegalArgumentException("Pet age can not be empty.");
-        }*/
-
+        }
     }
 }
