@@ -1,18 +1,14 @@
 package com.example.veterinary_clinic.services;
 
-import com.example.veterinary_clinic.dtos.PetRequest;
+import com.example.veterinary_clinic.dtos.PetRequestDTO;
 import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.entities.Pet;
 import com.example.veterinary_clinic.exceptions.GuardianFieldsCannotByEmptyException;
 import com.example.veterinary_clinic.exceptions.PetNotFoundException;
-import com.example.veterinary_clinic.mappers.PetMapper;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.repositories.PetRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.plugins.jpeg.JPEGQTable;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,20 +22,20 @@ public class PetServices {
         this.guardianRepository = guardianRepository;
     }
 
-    public Pet createPet(PetRequest petRequest){
+    public Pet createPet(PetRequestDTO petRequestDTO){
 
-        if (petRequest.name() == null || petRequest.name().isEmpty()){
+        if (petRequestDTO.name() == null || petRequestDTO.name().isEmpty()){
             throw new GuardianFieldsCannotByEmptyException("Pet name can not be empty.");
         }
 
-        if (petRequest.age() == null || petRequest.age().isEmpty()){
+        if (petRequestDTO.age() == null || petRequestDTO.age().isEmpty()){
             throw new GuardianFieldsCannotByEmptyException("Pet age can not be empty.");
         }
 
-        Guardian guardian = guardianRepository.findById(petRequest.guardianId())
+        Guardian guardian = guardianRepository.findById(petRequestDTO.guardianId())
                 .orElseThrow(() -> new PetNotFoundException("Guardian not found."));
 
-        Pet pet = new Pet(petRequest.name(), petRequest.breed(), petRequest.species(), petRequest.age(), guardian);  // could be changed into "toEntity"
+        Pet pet = new Pet(petRequestDTO.name(), petRequestDTO.breed(), petRequestDTO.species(), petRequestDTO.age(), guardian);  // could be changed into "toEntity"
 
         return petRepository.save(pet);
     }
@@ -63,19 +59,19 @@ public class PetServices {
         }
     }
 
-    public Pet modifyPet(Long id, PetRequest petRequest) {
+    public Pet modifyPet(Long id, PetRequestDTO petRequestDTO) {
         Pet existingPet = petRepository.findById(id)
                 .orElseThrow(() -> new PetNotFoundException("The pet with id " + id + " does not exist."));
 
-        if (petRequest.getGuardianId() != null) {
-            Guardian guardian = guardianRepository.findById(petRequest.getGuardianId())
-                    .orElseThrow(() -> new PetNotFoundException("Owner with id " + petRequest.getGuardianId() + " not found."));
+        if (petRequestDTO.getGuardianId() != null) {
+            Guardian guardian = guardianRepository.findById(petRequestDTO.getGuardianId())
+                    .orElseThrow(() -> new PetNotFoundException("Owner with id " + petRequestDTO.getGuardianId() + " not found."));
             existingPet.setGuardian(guardian);
         }
 
-        existingPet.setName(petRequest.getName());
-        existingPet.setAge(petRequest.getAge());
-        existingPet.setBreed(petRequest.getBreed());
+        existingPet.setName(petRequestDTO.getName());
+        existingPet.setAge(petRequestDTO.getAge());
+        existingPet.setBreed(petRequestDTO.getBreed());
 
         return petRepository.save(existingPet);
     }

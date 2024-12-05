@@ -1,6 +1,6 @@
 package com.example.veterinary_clinic.controllers;
 
-import com.example.veterinary_clinic.dtos.PetRequest;
+import com.example.veterinary_clinic.dtos.PetRequestDTO;
 import com.example.veterinary_clinic.entities.Pet;
 import com.example.veterinary_clinic.exceptions.PetNotFoundException;
 import com.example.veterinary_clinic.repositories.PetRepository;
@@ -44,15 +44,15 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<Pet> addPet(@RequestBody PetRequest petRequest) {//@RequestParam Long guardianId
-        Pet pet = petServices.createPet(petRequest);
+    public ResponseEntity<Pet> addPet(@RequestBody PetRequestDTO petRequestDTO) {//@RequestParam Long guardianId
+        Pet pet = petServices.createPet(petRequestDTO);
         return new ResponseEntity<>(pet, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePet(@PathVariable Long id, @RequestBody PetRequest petRequest) {
+    public ResponseEntity<?> updatePet(@PathVariable Long id, @RequestBody PetRequestDTO petRequestDTO) {
         try {
-            Pet modifiedPet = petServices.modifyPet(id, petRequest);
+            Pet modifiedPet = petServices.modifyPet(id, petRequestDTO);
             return new ResponseEntity<>(modifiedPet, HttpStatus.OK);
         } catch (PetNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
