@@ -44,6 +44,26 @@ public class GuardianService {
         return GuardianMapper.toResponseDto(savedGuardian);
     }
 
+    public List<Guardian> findAll() {
+        List<Guardian> guardianList = guardianRepository.findAll();
+
+        if(guardianList.isEmpty()) {
+           throw new GuardianNotFoundException("No existe ningún guardian para mostrar");
+        }
+        return guardianList;
+    }
+
+    public GuardianResponseDTO findById(Long id) {
+        Optional<Guardian> optionalGuardian = guardianRepository.findById(id);
+
+        if(optionalGuardian.isEmpty()) {
+            throw new GuardianNotFoundException("The guardian with id " + id + " does not exist.");
+        }
+        Guardian guardian = optionalGuardian.get();
+        return GuardianMapper.toResponseDto(guardian);
+    }
+
+
     public List<GuardianResponseDTO> findByNameIgnoreCaseContaining(String name) {
         List<GuardianResponseDTO> guardians = guardianRepository.findByNameIgnoreCaseContaining(name);
 
@@ -52,6 +72,28 @@ public class GuardianService {
         }
         return guardians;
     }
+
+    public GuardianResponseDTO updateGuardianById(Long id, GuardianRequestDTO guardianRequestDTO) {
+
+        if(guardianRequestDTO.name().isEmpty() || guardianRequestDTO.phoneNumber().isEmpty() || guardianRequestDTO.email().isEmpty() || guardianRequestDTO.address().isEmpty()) {
+            throw new GuardianFieldsCannotByEmptyException("Fields cannot by empty");
+        }
+        Optional<Guardian> optionalGuardian = guardianRepository.findById(id);
+
+        if(optionalGuardian.isPresent()) {
+            Guardian guardian = optionalGuardian.get();
+
+            guardian.setName(guardianRequestDTO.name());
+            guardian.setPhoneNumber(guardianRequestDTO.phoneNumber());
+            guardian.setEmail(guardianRequestDTO.email());
+            guardian.setAddress(guardianRequestDTO.address());
+
+            Guardian updatedGuardian = guardianRepository.save(guardian);
+            return GuardianMapper.toResponseDto(updatedGuardian);
+        }
+        throw new GuardianNotFoundException("The guardian with id " + id + " does not exist.");
+    }
+
     public void deleteGuardianById(Long id) {
         Optional<Guardian> optionalGuardian = guardianRepository.findById(id);
 
@@ -59,5 +101,5 @@ public class GuardianService {
             throw new GuardianNotFoundException("The guardian with id " + id + " does not exist.");
         }
         guardianRepository.deleteById(id);
-        }
+    }
  }
