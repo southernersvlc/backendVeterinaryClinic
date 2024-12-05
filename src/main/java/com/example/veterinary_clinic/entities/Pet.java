@@ -2,6 +2,8 @@ package com.example.veterinary_clinic.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Optional;
+
 @Entity
 
 public class Pet {
@@ -10,22 +12,26 @@ public class Pet {
     @Column(nullable = false)
     private Long id;
     private String name;
-    private String breed;
+    private String breed = "unknown";
+    private String species;
     private String age;
 
     @ManyToOne
     @JoinColumn(name = "guardian_id", nullable = false)
     private Guardian guardian;
 
-    public Pet(Long id, String name, String breed, String age, Guardian guardian) {
-        this.id = id;
+    public Pet(String name, String breed, String species,String age, Guardian guardian) {
         this.name = name;
-        this.breed = breed;
+        this.setBreed(breed); //set unknown for an empty field
+        this.species = species;
         this.age = age;
         this.guardian = guardian;
     }
 
     public Pet() {
+    }
+
+    public Pet(Optional<Pet> byId) {
     }
 
     public Long getId() {
@@ -45,7 +51,15 @@ public class Pet {
     }
 
     public void setBreed(String breed) {
-        this.breed = breed;
+        this.breed = (breed == null || breed.isEmpty()) ? "unknown" : breed;
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
     }
 
     public String getAge() {
