@@ -68,15 +68,11 @@ public class GuardianController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteGuardian(@PathVariable Long id) {
-        Optional<Guardian> optionalGuardianToDelete = guardianRepository.findById(id);
-
-        if (optionalGuardianToDelete.isPresent()) {
-            guardianRepository.deleteById(id);
-            return new ResponseEntity<>("The Guardian has been deleted correctly.", HttpStatus.OK);
-        }
-        return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.BAD_REQUEST);
+    public void  deleteGuardian(@PathVariable Long id) {
+        guardianService.deleteGuardianById(id);
+        new ResponseEntity<>("The guardian deleted", HttpStatus.OK);
     }
+
 }
 
 

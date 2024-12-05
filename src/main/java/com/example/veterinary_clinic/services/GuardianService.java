@@ -52,5 +52,12 @@ public class GuardianService {
         }
         return guardians;
     }
+    public void deleteGuardianById(Long id) {
+        Optional<Guardian> optionalGuardian = guardianRepository.findById(id);
 
-}
+        if (optionalGuardian.isEmpty()) {
+            throw new GuardianNotFoundException("The guardian with id " + id + " does not exist.");
+        }
+        guardianRepository.deleteById(id);
+        }
+ }
