@@ -1,4 +1,4 @@
-package com.example.veterinary_clinic.mapper;
+package com.example.veterinary_clinic.mappers;
 
 import com.example.veterinary_clinic.dtos.GuardianRequestDTO;
 import com.example.veterinary_clinic.dtos.GuardianResponseDTO;

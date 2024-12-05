@@ -1,9 +1,13 @@
 package com.example.veterinary_clinic.services;
 
+import com.example.veterinary_clinic.dtos.GuardianResponseDTO;
 import com.example.veterinary_clinic.dtos.PetRequest;
+import com.example.veterinary_clinic.dtos.PetResponse;
 import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.entities.Pet;
 import com.example.veterinary_clinic.exceptions.PetNotFoundException;
+import com.example.veterinary_clinic.exceptions.VeterinaryNotFoundException;
+import com.example.veterinary_clinic.mappers.GuardianMapper;
 import com.example.veterinary_clinic.mappers.PetMapper;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.repositories.PetRepository;
@@ -25,15 +29,14 @@ public class PetServices {
         this.guardianRepository = guardianRepository;
     }
 
-    public Pet createPet(PetRequest petRequest) {
+    public PetResponse createPet(PetRequest petRequest) {
         validatePetRequest(petRequest);
         Guardian guardian = guardianRepository.findById(petRequest.guardianId())
                 .orElseThrow(() -> new PetNotFoundException("Guardian not found."));
 
-        System.out.println("Hi" + petRequest);
-        Pet pet = new Pet(petRequest.name(), petRequest.breed(), petRequest.species(), petRequest.age(), guardian);  // could be changed into "toEntity"
-        System.out.println(pet);
-        return petRepository.save(pet);
+        Pet petToSave = PetMapper.toEntity(petRequest, guardian);
+        Pet savedPet = petRepository.save(petToSave);
+        return PetMapper.toResponse(savedPet);
     }
 
     public List<Pet> listAllPets (){
@@ -55,21 +58,21 @@ public class PetServices {
         }
     }
 
-    public Pet modifyPet(Long id, PetRequest petRequest) {
-        Pet existingPet = petRepository.findById(id)
-                .orElseThrow(() -> new PetNotFoundException("The pet with id " + id + " does not exist."));
+    public PetResponse modifyPet(Long id, PetRequest petRequest) {
+        Optional<Pet> optionalPet = petRepository.findById(id);
 
-        if (petRequest.getGuardianId() != null) {
-            Guardian guardian = guardianRepository.findById(petRequest.getGuardianId())
-                    .orElseThrow(() -> new PetNotFoundException("Owner with id " + petRequest.getGuardianId() + " not found."));
-            existingPet.setGuardian(guardian);
+        if(optionalPet.isPresent()) {
+            Pet pet = optionalPet.get();
+
+            pet.setName(petRequest.name());
+            pet.setBreed(petRequest.breed());
+            pet.setSpecies(petRequest.species());
+            pet.setAge(petRequest.age());
+
+            Pet updatePet = petRepository.save(pet);
+            return PetMapper.toResponse(updatePet);
         }
-
-        existingPet.setName(petRequest.getName());
-        existingPet.setAge(petRequest.getAge());
-        existingPet.setBreed(petRequest.getBreed());
-
-        return petRepository.save(existingPet);
+        throw new VeterinaryNotFoundException("The guardian with id " + id + " does not exist.");
     }
 
 

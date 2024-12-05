@@ -1,6 +1,7 @@
 package com.example.veterinary_clinic.controllers;
 
 import com.example.veterinary_clinic.dtos.PetRequest;
+import com.example.veterinary_clinic.dtos.PetResponse;
 import com.example.veterinary_clinic.entities.Pet;
 import com.example.veterinary_clinic.exceptions.PetNotFoundException;
 import com.example.veterinary_clinic.repositories.PetRepository;
@@ -16,16 +17,11 @@ import java.util.List;
 @RequestMapping("/pets")
 public class PetController {
 
-    private final PetRepository petRepository;
-    private final GuardianRepository guardianRepository;
     private final PetServices petServices;
 
-    public PetController(PetRepository petRepository, GuardianRepository guardianRepository, PetServices petServices) {
-        this.petRepository = petRepository;
-        this.guardianRepository = guardianRepository;
+    public PetController(PetServices petServices) {
         this.petServices = petServices;
     }
-
 
     @GetMapping()
     public List<Pet> getAllPets() {
@@ -44,19 +40,16 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<Pet> addPet(@RequestBody PetRequest petRequest) {//@RequestParam Long guardianId
-        Pet pet = petServices.createPet(petRequest);
+    public ResponseEntity<PetResponse> addPet(@RequestBody PetRequest petRequest) {//@RequestParam Long guardianId
+        PetResponse pet = petServices.createPet(petRequest);
         return new ResponseEntity<>(pet, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePet(@PathVariable Long id, @RequestBody PetRequest petRequest) {
-        try {
-            Pet modifiedPet = petServices.modifyPet(id, petRequest);
-            return new ResponseEntity<>(modifiedPet, HttpStatus.OK);
-        } catch (PetNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public PetResponse updatePet(@PathVariable Long id, @RequestBody PetRequest petRequest) {
+        PetResponse modifiedPet = petServices.modifyPet(id, petRequest);
+        return new ResponseEntity<>(modifiedPet, HttpStatus.OK).getBody();
+
     }
 
     @DeleteMapping("/{id}")

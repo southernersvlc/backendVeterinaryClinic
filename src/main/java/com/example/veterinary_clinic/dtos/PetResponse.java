@@ -9,6 +9,6 @@ public record PetResponse(
         String breed,
         String species,
         String age,
-        Long guardianId
+        GuardianResponseDTO guardian
 ) {
 }
