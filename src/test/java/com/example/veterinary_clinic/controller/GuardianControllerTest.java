@@ -1,4 +1,4 @@
-package com.example.veterinary_clinic;
+package com.example.veterinary_clinic.controller;
 
 import com.example.veterinary_clinic.controllers.GuardianController;
 import com.example.veterinary_clinic.entities.Guardian;

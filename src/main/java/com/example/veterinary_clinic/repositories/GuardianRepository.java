@@ -14,4 +14,5 @@ public interface GuardianRepository extends JpaRepository<Guardian, Long> {
     Optional<Guardian> findByPhoneNumber(String phoneNumber);
 
     List<GuardianResponseDTO> findByNameIgnoreCaseContaining(String name);
+
 }

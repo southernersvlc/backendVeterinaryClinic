@@ -5,7 +5,6 @@ import com.example.veterinary_clinic.dtos.GuardianResponseDTO;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.services.GuardianService;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +30,14 @@ public class GuardianController {
 
     @GetMapping
     public List<Guardian> getAllGuardians() {
-        return guardianRepository.findAll();
+        List<Guardian> guardianList = guardianService.findAll();
+        return new ResponseEntity<>(guardianList, HttpStatus.OK).getBody();
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<?> getGuardianById(@PathVariable Long id) {
-        Optional<Guardian> optionalGuardian = guardianRepository.findById(id);
-
-        if (optionalGuardian.isPresent()) {
-            return new ResponseEntity<>(optionalGuardian.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>("This Id does not belong to any guardian.", HttpStatus.NOT_FOUND);
+    public GuardianResponseDTO getGuardianById(@PathVariable Long id) {
+        GuardianResponseDTO guardianResponseDTO = guardianService.findById(id);
+        return new ResponseEntity<>(guardianResponseDTO, HttpStatus.OK).getBody();
     }
 
     @GetMapping("/name")
@@ -50,21 +46,10 @@ public class GuardianController {
         return new ResponseEntity<>(guardians, HttpStatus.OK).getBody();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateGuardian(@PathVariable Long id, @RequestBody Guardian guardian) {
-        Optional<Guardian> optionalGuardianToUpdate = guardianRepository.findById(id);
-
-        if (optionalGuardianToUpdate.isPresent()) {
-            Guardian guardianToUpdate = optionalGuardianToUpdate.get();
-            guardianToUpdate.setName(guardian.getName());
-            guardianToUpdate.setPhoneNumber(guardian.getPhoneNumber());
-
-            guardianRepository.save(guardianToUpdate);
-
-            return new ResponseEntity<>(guardianToUpdate, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("This Id doesn't exist.", HttpStatus.NOT_FOUND);
-        }
+   @PutMapping("/{id}")
+    public GuardianResponseDTO updateGuardian(@PathVariable Long id, @RequestBody GuardianRequestDTO guardianRequestDTO) {
+       GuardianResponseDTO guardianResponseDTO = guardianService.updateGuardianById(id, guardianRequestDTO);
+       return new ResponseEntity<>(guardianResponseDTO, HttpStatus.OK).getBody();
     }
 
     @DeleteMapping("/{id}")
