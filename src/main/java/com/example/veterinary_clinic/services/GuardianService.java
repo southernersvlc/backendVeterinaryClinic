@@ -44,8 +44,8 @@ public class GuardianService {
         return GuardianMapper.toResponseDto(savedGuardian);
     }
 
-    public List<Guardian> findByNameIgnoreCaseContaining(String name) {
-        List<Guardian> guardians = guardianRepository.findByNameIgnoreCaseContaining(name);
+    public List<GuardianResponseDTO> findByNameIgnoreCaseContaining(String name) {
+        List<GuardianResponseDTO> guardians = guardianRepository.findByNameIgnoreCaseContaining(name);
 
         if (guardians.isEmpty()) {
             throw new GuardianNotFoundException("The guardian with name " + name + " does not exist.");
