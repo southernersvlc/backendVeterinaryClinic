@@ -73,16 +73,12 @@ public class PetController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePet(@PathVariable Long id) {
-
-        Optional<Pet> optionalPetToDelete = petRepository.findById(id);
-
-        if (optionalPetToDelete.isPresent()) {
-            petRepository.deleteById(id);
-
-            return new ResponseEntity<>("The pet has been deleted correctly", HttpStatus.OK);
+        try {
+            petServices.killPet(id);
+            return new ResponseEntity<>("The pet has been deleted successfully.", HttpStatus.OK);
+        } catch (PetNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>("Ei buddy! this Id does not exist, chill out bro!", HttpStatus.BAD_REQUEST);
     }
 }
 

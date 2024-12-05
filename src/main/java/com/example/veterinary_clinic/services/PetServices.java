@@ -36,7 +36,6 @@ public class PetServices {
         return petRepository.save(pet);
     }
 
-
     public List<Pet> listAllPets (){
         return petRepository.findAll();
     }
@@ -44,6 +43,16 @@ public class PetServices {
     public Pet showPetById(Long id) {
         return petRepository.findById(id)
                 .orElseThrow(() -> new PetNotFoundException("Pet with ID " + id + " not found."));
+    }
+
+    public void killPet (Long id){
+        Optional<Pet> optionalPet = petRepository.findById(id);
+
+        if (optionalPet.isPresent()) {
+            petRepository.deleteById(id);
+        } else {
+            throw new PetNotFoundException("The pet with id " + id + " does not exist.");
+        }
     }
 
     private void validatePetRequest(PetRequest petRequest){
