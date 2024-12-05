@@ -24,19 +24,16 @@ public class PetController {
     }
 
     @GetMapping()
-    public List<Pet> getAllPets() {
-        List<Pet> allPets = petServices.listAllPets();
+    public List<PetResponse> getAllPets() {
+        List<PetResponse> allPets = petServices.listAllPets();
         return new ResponseEntity<>(allPets, HttpStatus.OK).getBody();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPetById(@PathVariable Long id) {
-        try {
-            Pet pet = petServices.showPetById(id);
-            return new ResponseEntity<>(pet, HttpStatus.OK);
-        } catch (PetNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public PetResponse getPetById(@PathVariable Long id) {
+            PetResponse petResponse = petServices.showPetById(id);
+        return new ResponseEntity<>(petResponse, HttpStatus.OK).getBody();
+
     }
 
     @PostMapping

@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.plugins.jpeg.JPEGQTable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,18 +40,28 @@ public class PetServices {
         return PetMapper.toResponse(savedPet);
     }
 
-    public List<Pet> listAllPets (){
+    public List<PetResponse> listAllPets (){
         List<Pet> petList = petRepository.findAll();
+        List<PetResponse> responseList = new java.util.ArrayList<>(Collections.emptyList());
+        petList.forEach(pet -> {
+            PetResponse petResponse = PetMapper.toResponse(pet);
+            responseList.add(petResponse);
+        });
 
         if(petList.isEmpty()) {
             throw new VeterinaryNotFoundException("There is no guardian to show");
         }
-        return petList;
+        return responseList;
     }
 
-    public Pet showPetById(Long id) {
-        return petRepository.findById(id)
-                .orElseThrow(() -> new PetNotFoundException("Pet with ID " + id + " not found."));
+    public PetResponse showPetById(Long id) {
+        Optional<Pet> optionalPet = petRepository.findById(id);
+
+        if(optionalPet.isEmpty()) {
+            throw new VeterinaryNotFoundException("Pet with id " + id + " does not exist.");
+        }
+        Pet pet = optionalPet.get();
+        return PetMapper.toResponse(pet);
     }
 
     public void killPet (Long id){

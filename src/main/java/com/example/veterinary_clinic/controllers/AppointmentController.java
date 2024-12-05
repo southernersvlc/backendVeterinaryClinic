@@ -26,8 +26,8 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public List<Appointment> getAllAppointments() {
-        List<Appointment> appointmentList = appointmentService.findAll();
+    public List<AppointmentResponseDTO> getAllAppointments() {
+        List<AppointmentResponseDTO> appointmentList = appointmentService.findAll();
         return new ResponseEntity<>(appointmentList, HttpStatus.OK).getBody();
     }
 }

@@ -11,6 +11,7 @@ import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.repositories.PetRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,12 +40,19 @@ public class AppointmentService {
         throw new VeterinaryNotFoundException("There is no pet with this id.");
     }
 
-    public List<Appointment> findAll() {
+    public List<AppointmentResponseDTO> findAll() {
         List<Appointment> appointmentList = appointmentRepository.findAll();
+        List<AppointmentResponseDTO> responseList = new java.util.ArrayList<>(Collections.emptyList());
+        appointmentList.forEach(appointment -> {
+            AppointmentResponseDTO appointmentResponseDTO = AppointmentMapper.toResponseDto(appointment, petRepository.getReferenceById(appointment.getId()));
+            responseList.add(appointmentResponseDTO);
+                });
 
         if(appointmentList.isEmpty()) {
             throw new VeterinaryNotFoundException("There is not appointment to show");
         }
-        return appointmentList;
+        return responseList;
     }
+
+
 }
