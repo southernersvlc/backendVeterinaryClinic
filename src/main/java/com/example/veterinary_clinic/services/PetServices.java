@@ -1,21 +1,16 @@
 package com.example.veterinary_clinic.services;
 
-import com.example.veterinary_clinic.dtos.GuardianResponseDTO;
 import com.example.veterinary_clinic.dtos.PetRequest;
 import com.example.veterinary_clinic.dtos.PetResponse;
 import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.entities.Pet;
-import com.example.veterinary_clinic.exceptions.PetNotFoundException;
+import com.example.veterinary_clinic.exceptions.VeterinaryFieldsCannotBeEmptyException;
 import com.example.veterinary_clinic.exceptions.VeterinaryNotFoundException;
-import com.example.veterinary_clinic.mappers.GuardianMapper;
 import com.example.veterinary_clinic.mappers.PetMapper;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.repositories.PetRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.plugins.jpeg.JPEGQTable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +28,7 @@ public class PetServices {
     public PetResponse createPet(PetRequest petRequest) {
         validatePetRequest(petRequest);
         Guardian guardian = guardianRepository.findById(petRequest.guardianId())
-                .orElseThrow(() -> new PetNotFoundException("Guardian not found."));
+                .orElseThrow(() -> new VeterinaryNotFoundException("There is no guardian with this id."));
 
         Pet petToSave = PetMapper.toEntity(petRequest, guardian);
         Pet savedPet = petRepository.save(petToSave);
@@ -49,7 +44,7 @@ public class PetServices {
         });
 
         if(petList.isEmpty()) {
-            throw new VeterinaryNotFoundException("There is no guardian to show");
+            throw new VeterinaryNotFoundException("There are no pets to show");
         }
         return responseList;
     }
@@ -64,13 +59,13 @@ public class PetServices {
         return PetMapper.toResponse(pet);
     }
 
-    public void killPet (Long id){
+    public void deletePetById(Long id){
         Optional<Pet> optionalPet = petRepository.findById(id);
 
         if (optionalPet.isPresent()) {
             petRepository.deleteById(id);
         } else {
-            throw new PetNotFoundException("The pet with id " + id + " does not exist.");
+            throw new VeterinaryNotFoundException("The pet with id " + id + " does not exist.");
         }
     }
 
@@ -94,13 +89,11 @@ public class PetServices {
 
     private void validatePetRequest(PetRequest petRequest){
         if (petRequest.name() == null || petRequest.name().isEmpty()){
-            throw new IllegalArgumentException("Pet name can not be empty.");
+            throw new VeterinaryFieldsCannotBeEmptyException("Pet name can not be empty.");
         }
 
         if (petRequest.age() == null || petRequest.age().isEmpty()){
-            throw new IllegalArgumentException("Pet age can not be empty.");
+            throw new VeterinaryFieldsCannotBeEmptyException("Pet age can not be empty.");
         }
     }
-
-
 }

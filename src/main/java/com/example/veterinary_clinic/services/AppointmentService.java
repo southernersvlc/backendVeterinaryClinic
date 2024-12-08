@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentService {
@@ -30,12 +31,12 @@ public class AppointmentService {
         this.guardianRepository = guardianRepository;
     }
 
-    public AppointmentResponseDTO createAppoiment(AppointmentRequestDTO appointmentRequestDTO) {
+    public AppointmentResponseDTO createAppointment(AppointmentRequestDTO appointmentRequestDTO) {
         Optional<Pet> pet = petRepository.findById(appointmentRequestDTO.petId());
         if (pet.isPresent()) {
             Appointment appointment = AppointmentMapper.toEntity(appointmentRequestDTO, pet.get());
             Appointment savedAppoiment = appointmentRepository.save(appointment);
-            return AppointmentMapper.toResponseDto(savedAppoiment, pet.get());
+            return AppointmentMapper.toResponseDto(savedAppoiment);
         }
         throw new VeterinaryNotFoundException("There is no pet with this id.");
     }
@@ -44,7 +45,7 @@ public class AppointmentService {
         List<Appointment> appointmentList = appointmentRepository.findAll();
         List<AppointmentResponseDTO> responseList = new java.util.ArrayList<>(Collections.emptyList());
         appointmentList.forEach(appointment -> {
-            AppointmentResponseDTO appointmentResponseDTO = AppointmentMapper.toResponseDto(appointment, petRepository.getReferenceById(appointment.getId()));
+            AppointmentResponseDTO appointmentResponseDTO = AppointmentMapper.toResponseDto(appointment);
             responseList.add(appointmentResponseDTO);
                 });
 
@@ -54,5 +55,44 @@ public class AppointmentService {
         return responseList;
     }
 
+    public AppointmentResponseDTO findById(Long id) {
+        Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
 
+        if(optionalAppointment.isEmpty()) {
+            throw new VeterinaryNotFoundException("The appointment with id " + id + " does not exist.");
+        }
+        Appointment appointment = optionalAppointment.get();
+        return AppointmentMapper.toResponseDto(appointment);
+    }
+
+    public AppointmentResponseDTO updateAppointmentById(Long id, AppointmentRequestDTO appointmentRequestDTO) {
+        Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
+        if (optionalAppointment.isEmpty()) {
+            throw new VeterinaryNotFoundException("The appointment with id " + id + " does not exist.");
+        }
+
+        Appointment appointment = optionalAppointment.get();
+
+        Optional<Pet> optionalPet = petRepository.findById(appointmentRequestDTO.petId());
+        if (optionalPet.isEmpty()) {
+            throw new VeterinaryNotFoundException("The pet with id " + appointmentRequestDTO.petId() + " does not exist.");
+        }
+
+        appointment.setDate(appointmentRequestDTO.date());
+        appointment.setTime(appointmentRequestDTO.time());
+        appointment.setReason(appointmentRequestDTO.reason());
+
+        Appointment updatedAppointment = appointmentRepository.save(appointment);
+
+        return AppointmentMapper.toResponseDto(updatedAppointment);
+    }
+
+    public void deleteAppointmentById(Long id) {
+        Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
+
+        if (optionalAppointment.isEmpty()) {
+            throw new VeterinaryNotFoundException("The appointment with id " + id + " does not exist.");
+        }
+        appointmentRepository.deleteById(id);
+    }
 }

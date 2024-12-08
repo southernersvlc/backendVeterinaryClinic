@@ -15,8 +15,8 @@ public class AppointmentMapper {
                 pet);
     }
 
-    public static AppointmentResponseDTO toResponseDto(Appointment appointment, Pet pet) {
-        PetResponse petResponse = PetMapper.toResponse(pet);
+    public static AppointmentResponseDTO toResponseDto(Appointment appointment) {
+        PetResponse petResponse = PetMapper.toResponse(appointment.getPet());
         return new AppointmentResponseDTO(
                 appointment.getId(),
                 appointment.getDate(),
@@ -24,4 +24,5 @@ public class AppointmentMapper {
                 appointment.getReason(),
                 petResponse);
     }
+
 }

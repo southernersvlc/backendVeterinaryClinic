@@ -33,8 +33,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(VeterinaryFieldsCannotByEmptyException.class)
-    public ResponseEntity<ErrorObject> handleVeterinaryFieldsCannotByEmptyException(VeterinaryFieldsCannotByEmptyException ex) {
+    @ExceptionHandler(VeterinaryFieldsCannotBeEmptyException.class)
+    public ResponseEntity<ErrorObject> handleVeterinaryFieldsCannotByEmptyException(VeterinaryFieldsCannotBeEmptyException ex) {
         ErrorObject errorObject = new ErrorObject();
         errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
         errorObject.setMessage(ex.getMessage());

@@ -49,20 +49,19 @@ class GuardianServiceTest {
     @Test
     void findById() {
         //GIVEN
-        GuardianRequestDTO guardianRequestDTO = new GuardianRequestDTO("some-name", "123456789", "some-address", "some-email@email.com");
+        Long expectedGuardianId = 1L;
         GuardianService guardianService = new GuardianService(guardianRepository);
-        Guardian findGuardian = new Guardian("some-name", "123456789", "some-address", "some-email@email.com");
 
         //MOCK
-        Guardian expectedGuardian = new Guardian(1L,"some-name", "123456789", "some-address", "some-email@email.com");
+        Guardian expectedGuardian = new Guardian(expectedGuardianId,"some-name", "123456789", "some-address", "some-email@email.com");
         GuardianResponseDTO expectedGuardianResponse = GuardianMapper.toResponseDto(expectedGuardian);
-        Mockito.when(guardianRepository.findById(1L)).thenReturn(Optional.of(expectedGuardian));
+        Mockito.when(guardianRepository.findById(expectedGuardianId)).thenReturn(Optional.of(expectedGuardian));
 
         //WHEN
-        GuardianResponseDTO guardianResponseDTO = guardianService.findById(1L);
+        GuardianResponseDTO guardianResponseDTO = guardianService.findById(expectedGuardianId);
 
         //THEN
-        verify(guardianRepository).findById(1L);
+        verify(guardianRepository).findById(expectedGuardianId);
         assertEquals(expectedGuardianResponse, guardianResponseDTO);
     }
 
