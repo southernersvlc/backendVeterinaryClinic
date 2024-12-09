@@ -2,7 +2,7 @@ package com.example.veterinary_clinic.mappers;
 
 import com.example.veterinary_clinic.dtos.AppointmentRequestDTO;
 import com.example.veterinary_clinic.dtos.AppointmentResponseDTO;
-import com.example.veterinary_clinic.dtos.PetResponse;
+import com.example.veterinary_clinic.dtos.PetResponseDTO;
 import com.example.veterinary_clinic.entities.Appointment;
 import com.example.veterinary_clinic.entities.Pet;
 
@@ -16,13 +16,13 @@ public class AppointmentMapper {
     }
 
     public static AppointmentResponseDTO toResponseDto(Appointment appointment) {
-        PetResponse petResponse = PetMapper.toResponse(appointment.getPet());
+        PetResponseDTO petResponseDTO = PetMapper.toResponse(appointment.getPet());
         return new AppointmentResponseDTO(
                 appointment.getId(),
                 appointment.getDate(),
                 appointment.getTime(),
                 appointment.getReason(),
-                petResponse);
+                petResponseDTO);
     }
 
 }

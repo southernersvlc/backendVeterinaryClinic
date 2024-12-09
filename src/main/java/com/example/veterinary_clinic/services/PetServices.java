@@ -1,7 +1,7 @@
 package com.example.veterinary_clinic.services;
 
-import com.example.veterinary_clinic.dtos.PetRequest;
-import com.example.veterinary_clinic.dtos.PetResponse;
+import com.example.veterinary_clinic.dtos.PetRequestDTO;
+import com.example.veterinary_clinic.dtos.PetResponseDTO;
 import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.entities.Pet;
 import com.example.veterinary_clinic.exceptions.VeterinaryFieldsCannotBeEmptyException;
@@ -25,22 +25,22 @@ public class PetServices {
         this.guardianRepository = guardianRepository;
     }
 
-    public PetResponse createPet(PetRequest petRequest) {
-        validatePetRequest(petRequest);
-        Guardian guardian = guardianRepository.findById(petRequest.guardianId())
+    public PetResponseDTO createPet(PetRequestDTO petRequestDTO) {
+        validatePetRequest(petRequestDTO);
+        Guardian guardian = guardianRepository.findById(petRequestDTO.guardianId())
                 .orElseThrow(() -> new VeterinaryNotFoundException("There is no guardian with this id."));
 
-        Pet petToSave = PetMapper.toEntity(petRequest, guardian);
+        Pet petToSave = PetMapper.toEntity(petRequestDTO, guardian);
         Pet savedPet = petRepository.save(petToSave);
         return PetMapper.toResponse(savedPet);
     }
 
-    public List<PetResponse> listAllPets (){
+    public List<PetResponseDTO> listAllPets (){
         List<Pet> petList = petRepository.findAll();
-        List<PetResponse> responseList = new java.util.ArrayList<>(Collections.emptyList());
+        List<PetResponseDTO> responseList = new java.util.ArrayList<>(Collections.emptyList());
         petList.forEach(pet -> {
-            PetResponse petResponse = PetMapper.toResponse(pet);
-            responseList.add(petResponse);
+            PetResponseDTO petResponseDTO = PetMapper.toResponse(pet);
+            responseList.add(petResponseDTO);
         });
 
         if(petList.isEmpty()) {
@@ -49,7 +49,7 @@ public class PetServices {
         return responseList;
     }
 
-    public PetResponse showPetById(Long id) {
+    public PetResponseDTO showPetById(Long id) {
         Optional<Pet> optionalPet = petRepository.findById(id);
 
         if(optionalPet.isEmpty()) {
@@ -69,16 +69,16 @@ public class PetServices {
         }
     }
 
-    public PetResponse modifyPet(Long id, PetRequest petRequest) {
+    public PetResponseDTO modifyPet(Long id, PetRequestDTO petRequestDTO) {
         Optional<Pet> optionalPet = petRepository.findById(id);
 
         if(optionalPet.isPresent()) {
             Pet pet = optionalPet.get();
 
-            pet.setName(petRequest.name());
-            pet.setBreed(petRequest.breed());
-            pet.setSpecies(petRequest.species());
-            pet.setAge(petRequest.age());
+            pet.setName(petRequestDTO.name());
+            pet.setBreed(petRequestDTO.breed());
+            pet.setSpecies(petRequestDTO.species());
+            pet.setAge(petRequestDTO.age());
 
             Pet updatePet = petRepository.save(pet);
             return PetMapper.toResponse(updatePet);
@@ -87,12 +87,12 @@ public class PetServices {
     }
 
 
-    private void validatePetRequest(PetRequest petRequest){
-        if (petRequest.name() == null || petRequest.name().isEmpty()){
+    private void validatePetRequest(PetRequestDTO petRequestDTO){
+        if (petRequestDTO.name() == null || petRequestDTO.name().isEmpty()){
             throw new VeterinaryFieldsCannotBeEmptyException("Pet name can not be empty.");
         }
 
-        if (petRequest.age() == null || petRequest.age().isEmpty()){
+        if (petRequestDTO.age() == null || petRequestDTO.age().isEmpty()){
             throw new VeterinaryFieldsCannotBeEmptyException("Pet age can not be empty.");
         }
     }

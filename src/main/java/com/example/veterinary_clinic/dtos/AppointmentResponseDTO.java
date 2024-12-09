@@ -5,6 +5,6 @@ public record AppointmentResponseDTO(
         String date,
         String time,
         String reason,
-        PetResponse pet
+        PetResponseDTO pet
 ) {
 }

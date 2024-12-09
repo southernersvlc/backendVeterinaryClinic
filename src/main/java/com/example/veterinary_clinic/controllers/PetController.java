@@ -1,7 +1,7 @@
 package com.example.veterinary_clinic.controllers;
 
-import com.example.veterinary_clinic.dtos.PetRequest;
-import com.example.veterinary_clinic.dtos.PetResponse;
+import com.example.veterinary_clinic.dtos.PetRequestDTO;
+import com.example.veterinary_clinic.dtos.PetResponseDTO;
 import com.example.veterinary_clinic.exceptions.PetNotFoundException;
 import com.example.veterinary_clinic.services.PetServices;
 import jakarta.validation.Valid;
@@ -22,27 +22,27 @@ public class PetController {
     }
 
     @GetMapping()
-    public List<PetResponse> getAllPets() {
-        List<PetResponse> allPets = petServices.listAllPets();
+    public List<PetResponseDTO> getAllPets() {
+        List<PetResponseDTO> allPets = petServices.listAllPets();
         return new ResponseEntity<>(allPets, HttpStatus.OK).getBody();
     }
 
     @GetMapping("/{id}")
-    public PetResponse getPetById(@PathVariable Long id) {
-            PetResponse petResponse = petServices.showPetById(id);
-        return new ResponseEntity<>(petResponse, HttpStatus.OK).getBody();
+    public PetResponseDTO getPetById(@PathVariable Long id) {
+            PetResponseDTO petResponseDTO = petServices.showPetById(id);
+        return new ResponseEntity<>(petResponseDTO, HttpStatus.OK).getBody();
 
     }
 
     @PostMapping
-    public ResponseEntity<PetResponse> addPet(@RequestBody @Valid PetRequest petRequest) {
-        PetResponse pet = petServices.createPet(petRequest);
+    public ResponseEntity<PetResponseDTO> addPet(@RequestBody @Valid PetRequestDTO petRequestDTO) {
+        PetResponseDTO pet = petServices.createPet(petRequestDTO);
         return new ResponseEntity<>(pet, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public PetResponse updatePet(@PathVariable Long id, @RequestBody @Valid PetRequest petRequest) {
-        PetResponse modifiedPet = petServices.modifyPet(id, petRequest);
+    public PetResponseDTO updatePet(@PathVariable Long id, @RequestBody @Valid PetRequestDTO petRequestDTO) {
+        PetResponseDTO modifiedPet = petServices.modifyPet(id, petRequestDTO);
         return new ResponseEntity<>(modifiedPet, HttpStatus.OK).getBody();
 
     }

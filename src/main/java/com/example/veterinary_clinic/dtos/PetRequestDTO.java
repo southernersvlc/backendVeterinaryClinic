@@ -1,11 +1,9 @@
 package com.example.veterinary_clinic.dtos;
 
-import com.example.veterinary_clinic.entities.Guardian;
-import com.example.veterinary_clinic.entities.Pet;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public record PetRequest(
+public record PetRequestDTO(
 
         @NotNull(message = "The name cannot be null")
         @NotEmpty(message = "The name cannot be empty")
