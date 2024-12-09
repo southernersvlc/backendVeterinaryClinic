@@ -1,23 +1,48 @@
 # Veterinary Clinic Application 🐾
 
-This is a Spring Boot backend application designed to manage Margarita's veterinary clinic. The system supports the management of **Owners** and their **Patients** (pets) through CRUD operations.
+This is a Spring Boot backend application designed to manage Margarita's veterinary clinic. The system supports the management of **Guardians** and their **Pets** (pets) through CRUD operations.
 
 ---
+## What we have learned 
 
+In this project we have worked with several new valuable insights into building a structured and maintainable backend application using Spring Boot.
+- **Data Transfer.  Objects (DTOs)**: DTOs help decouple the data layer from the presentation layer. Instead of exposing entire entities, we use DTOs to transfer only necessary data between the client and server.
+
+
+- **Service Layer**: The service layer handles business logic, keeping controllers clean and focused solely on handling HTTP requests.
+
+
+- **Mappers**: Mappers convert between DTOs and entities, ensuring data transformation.
+---
 ## Features ✨
 
-- **Owner Management** 🧑‍⚕️
+- **Guardian Management** 🧑‍⚕️
     - Add, update, delete, and retrieve owners.
     - Validation for unique phone numbers and proper formatting.
 
-- **Patient Management** 🐶🐱
+- **Pet Management** 🐶
     - Add, update, delete, and retrieve patients.
     - Associate patients with owners.
 
-- **Validation and Error Handling**
+- **Appointment Management** 🐱
+  - Add, update, delete, and retrieve appointments.
+  - Associate appointments with pets.
+
+- **Statistics** 📊
+  - Counts and show the total amount saved of pets, owners and dates within the system.
+  
+- **Validation and Error Handling** 
     - Proper checks to ensure required fields are populated.
     - Error messages for invalid data or non-existent IDs.
 
+---
+## Diagrams
+![erDiagramMargarita.png](Utils%2FerDiagramMargarita.png)
+![umlClinicVet.png](Utils%2FumlClinicVet.png)
+---
+## EndPoints
+![guardians endpoints.png](Utils%2Fguardians%20endpoints.png)
+![pets endpoints.png](Utils%2Fpets%20endpoints.png)
 ---
 
 ## Technologies Used ⚙️
@@ -42,25 +67,52 @@ This is a Spring Boot backend application designed to manage Margarita's veterin
 ---
 
 ## 📦 **Files Structure**
+    |--- utils
     |--- src
         |--- main
             |--- java
                 |---com.example.veterinary_clinic
                         |--- controllers
-				|--- OwnerController
-				|--- PatientController
+                            |--- GuardianController
+                            |--- PetController
+                            |--- AppointmentController
+                            |--- StatisticsController
+                        |--- dtos
+                            |--- AppointmentRequestDTO
+                            |--- AppointmentResponseDTO
+                            |--- GuardianRequestDTO
+                            |--- GuardianResponseDTO
+                            |--- PetRequestDTO
+                            |--- PetResponseDTO
+                            |--- StatisticsResponseDTO
                         |--- entities
-				|--- Owner
-				|--- Patient
+                            |--- Appointment
+                            |--- Guardian
+                            |--- Patient
+                        |--- exceptions
+                        |--- mappers
+                            |--- AppointmentMapper
+                            |--- GuardianMapper
+                            |--- PetMapper
                         |--- repositories
-				|--- OwnerRepository
-				|--- PatientRepository
-                        |--- ShoppingListBackendApplication
+                            |--- AppointmentRepository
+                            |--- GuardianRepository
+                            |--- PetRepository
+                        |--- services
+                            |--- AppointmentService
+                            |--- GuardianService
+                            |--- PetServices
+                            |--- StatisticsService
+                        |--- VeterinaryClinicApplication
         |--- test
            |--- java
                |---com.example.veterinary_clinic
-                        |--- OwnerControllerTest
-                        |--- VeterinaryClinicApplicationTest
+                        |--- controller
+                            |--- OwnerControllerTest
+
+                        |--- services
+                            |--- GuardianServiceTest
+                        |--- VeterinaryClinicApplicationTests
 
 ---
 ## 💻 Technology Stack:
