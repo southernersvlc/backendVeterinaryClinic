@@ -67,7 +67,7 @@ class GuardianControllerTest {
         String guardianWithEmptyName = """
                     {
                         "name": "",
-                        "phoneNumber": "",
+                        "phoneNumber": "123456789",
                         "email":"guardian1@gmail.com",
                         "address": "amatista 1"
                     }
@@ -191,6 +191,6 @@ class GuardianControllerTest {
 
         mockMvc.perform(delete("/guardians/" + guardian.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("The Guardian has been deleted correctly."));
+                .andExpect(content().string("The guardian has been eliminated"));
     }
 }

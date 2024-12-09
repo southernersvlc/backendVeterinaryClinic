@@ -3,17 +3,16 @@ package com.example.veterinary_clinic.services;
 import com.example.veterinary_clinic.dtos.GuardianRequestDTO;
 import com.example.veterinary_clinic.dtos.GuardianResponseDTO;
 import com.example.veterinary_clinic.entities.Guardian;
-import com.example.veterinary_clinic.exceptions.VeterinaryFieldsCannotByEmptyException;
-import com.example.veterinary_clinic.exceptions.VeterinaryInvalidPhoneNumberException;
-import com.example.veterinary_clinic.exceptions.VeterinaryNotFoundException;
-import com.example.veterinary_clinic.exceptions.VeterinaryPhoneNumberAlreadyExistsException;
-import com.example.veterinary_clinic.mapper.GuardianMapper;
+import com.example.veterinary_clinic.exceptions.*;
+import com.example.veterinary_clinic.mappers.GuardianMapper;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class GuardianService {
@@ -25,32 +24,32 @@ public class GuardianService {
     }
 
     public GuardianResponseDTO createGuardian(GuardianRequestDTO guardianRequestDTO) {
-
-        if(guardianRequestDTO.name().isEmpty() || guardianRequestDTO.phoneNumber().isEmpty() || guardianRequestDTO.email().isEmpty() || guardianRequestDTO.address().isEmpty()) {
-            throw new VeterinaryFieldsCannotByEmptyException("Fields cannot by empty");
-        }
-
         String phoneNumberPattern = "^\\d{9}$";
         if (!Pattern.matches(phoneNumberPattern, guardianRequestDTO.phoneNumber())) {
-            throw new VeterinaryInvalidPhoneNumberException("Phone number must have exactly 9 digits."); // IlegalArgument
+            throw new VeterinaryInvalidPhoneNumberException("Phone number must have exactly 9 digits.");
         }
 
         Optional<Guardian> existGuardian = guardianRepository.findByPhoneNumber(guardianRequestDTO.phoneNumber());
         if (existGuardian.isPresent())
-            throw new VeterinaryPhoneNumberAlreadyExistsException("Guardian already exist with this phone number");
+            throw new VeterinaryExistingPhoneNumberException("Guardian already exist with this phone number");
 
         Guardian guardian = GuardianMapper.toEntity(guardianRequestDTO);
         Guardian savedGuardian = guardianRepository.save(guardian);
         return GuardianMapper.toResponseDto(savedGuardian);
     }
 
-    public List<Guardian> findAll() {
+    public List<GuardianResponseDTO> findAll() {
         List<Guardian> guardianList = guardianRepository.findAll();
+        List<GuardianResponseDTO> responseList = new java.util.ArrayList<>(Collections.emptyList());
+        guardianList.forEach(guardian -> {
+            GuardianResponseDTO guardianResponseDTO = GuardianMapper.toResponseDto(guardian);
+            responseList.add(guardianResponseDTO);
+        });
 
-        if(guardianList.isEmpty()) {
-           throw new VeterinaryNotFoundException("No existe ningún guardian para mostrar");
+        if(responseList.isEmpty()) {
+           throw new VeterinaryNotFoundException("There is not guardian to show");
         }
-        return guardianList;
+        return responseList;
     }
 
     public GuardianResponseDTO findById(Long id) {
@@ -74,10 +73,6 @@ public class GuardianService {
     }
 
     public GuardianResponseDTO updateGuardianById(Long id, GuardianRequestDTO guardianRequestDTO) {
-
-        if(guardianRequestDTO.name().isEmpty() || guardianRequestDTO.phoneNumber().isEmpty() || guardianRequestDTO.email().isEmpty() || guardianRequestDTO.address().isEmpty()) {
-            throw new VeterinaryFieldsCannotByEmptyException("Fields cannot by empty");
-        }
         Optional<Guardian> optionalGuardian = guardianRepository.findById(id);
 
         if(optionalGuardian.isPresent()) {
