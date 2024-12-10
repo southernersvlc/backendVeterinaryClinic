@@ -53,7 +53,7 @@ class GuardianControllerTest {
         String guardianWithEmptyPhone = """
                     {
                         "name": "Jose",
-                        "phoneNumber": "",
+                        "phone": "",
                         "email":"guardian1@gmail.com",
                         "address": "amatista 1"
                     }
@@ -67,7 +67,7 @@ class GuardianControllerTest {
         String guardianWithEmptyName = """
                     {
                         "name": "",
-                        "phoneNumber": "123456789",
+                        "phone": "123456789",
                         "email":"guardian1@gmail.com",
                         "address": "amatista 1"
                     }
@@ -84,7 +84,7 @@ class GuardianControllerTest {
         String guardianWithAWrongPhoneNumber = """
                     {
                         "name": "Jose",
-                        "phoneNumber": "123as",
+                        "phone": "123as",
                         "email":"guardian1@gmail.com",
                         "address": "amatista 1"
                     }
@@ -101,7 +101,7 @@ class GuardianControllerTest {
         String firstGuardian = """
                     {
                         "name": "Jose",
-                        "phoneNumber": "123456789",
+                        "phone": "123456789",
                         "email":"guardian1@gmail.com",
                         "address": "amatista 1"
                     }
@@ -115,7 +115,7 @@ class GuardianControllerTest {
         String duplicatePhoneGuardian = """
                     {
                         "name": "John",
-                        "phoneNumber": "123456789",
+                        "phone": "123456789",
                         "email":"guardian1@gmail.com",
                         "address": "amatista 1"
                     }
@@ -137,8 +137,9 @@ class GuardianControllerTest {
         mockMvc.perform(get("/guardians/id/" + guardian.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(guardian.getId())))
                 .andExpect(jsonPath("$.name", is(guardian.getName())))
-                .andExpect(jsonPath("$.phoneNumber", is(guardian.getPhone())))
+                .andExpect(jsonPath("$.phone", is(guardian.getPhone())))
                 .andExpect(jsonPath("$.email", is(guardian.getEmail())))
                 .andExpect(jsonPath("$.address", is(guardian.getAddress())));
     }
@@ -154,7 +155,7 @@ class GuardianControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name", is(guardian.getName())))
-                .andExpect(jsonPath("$[0].phoneNumber", is(guardian.getPhone())))
+                .andExpect(jsonPath("$[0].phone", is(guardian.getPhone())))
                 .andExpect(jsonPath("$[0].email", is(guardian.getEmail())))
                 .andExpect(jsonPath("$[0].address", is(guardian.getAddress())));
     }
@@ -166,8 +167,9 @@ class GuardianControllerTest {
 
         String updatedGuardian = """
                     {
+                        "id": 1,
                         "name": "Arthur",
-                        "phoneNumber": "111333666",
+                        "phone": "111333666",
                         "email": "guardian1@gmail.com",
                         "address": "amatista 1"
                     }
@@ -178,7 +180,7 @@ class GuardianControllerTest {
                         .content(updatedGuardian))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Arthur")))
-                .andExpect(jsonPath("$.phoneNumber", is("111333666")))
+                .andExpect(jsonPath("$.phone", is("111333666")))
                 .andExpect(jsonPath("$.email", is("guardian1@gmail.com")))
                 .andExpect(jsonPath("$.address", is("amatista 1")));
     }
