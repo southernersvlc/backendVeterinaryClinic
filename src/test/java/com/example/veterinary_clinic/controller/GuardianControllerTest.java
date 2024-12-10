@@ -138,7 +138,7 @@ class GuardianControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(guardian.getName())))
-                .andExpect(jsonPath("$.phoneNumber", is(guardian.getPhoneNumber())))
+                .andExpect(jsonPath("$.phoneNumber", is(guardian.getPhone())))
                 .andExpect(jsonPath("$.email", is(guardian.getEmail())))
                 .andExpect(jsonPath("$.address", is(guardian.getAddress())));
     }
@@ -154,7 +154,7 @@ class GuardianControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name", is(guardian.getName())))
-                .andExpect(jsonPath("$[0].phoneNumber", is(guardian.getPhoneNumber())))
+                .andExpect(jsonPath("$[0].phoneNumber", is(guardian.getPhone())))
                 .andExpect(jsonPath("$[0].email", is(guardian.getEmail())))
                 .andExpect(jsonPath("$[0].address", is(guardian.getAddress())));
     }

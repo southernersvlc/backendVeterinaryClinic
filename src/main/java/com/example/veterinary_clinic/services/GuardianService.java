@@ -8,11 +8,9 @@ import com.example.veterinary_clinic.mappers.GuardianMapper;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 public class GuardianService {
@@ -25,11 +23,11 @@ public class GuardianService {
 
     public GuardianResponseDTO createGuardian(GuardianRequestDTO guardianRequestDTO) {
         String phoneNumberPattern = "^\\d{9}$";
-        if (!Pattern.matches(phoneNumberPattern, guardianRequestDTO.phoneNumber())) {
+        if (!Pattern.matches(phoneNumberPattern, guardianRequestDTO.phone())) {
             throw new VeterinaryInvalidPhoneNumberException("Phone number must have exactly 9 digits.");
         }
 
-        Optional<Guardian> existGuardian = guardianRepository.findByPhoneNumber(guardianRequestDTO.phoneNumber());
+        Optional<Guardian> existGuardian = guardianRepository.findByPhone(guardianRequestDTO.phone());
         if (existGuardian.isPresent())
             throw new VeterinaryExistingPhoneNumberException("Guardian already exist with this phone number");
 
@@ -72,7 +70,7 @@ public class GuardianService {
             Guardian guardian = optionalGuardian.get();
 
             guardian.setName(guardianRequestDTO.name());
-            guardian.setPhoneNumber(guardianRequestDTO.phoneNumber());
+            guardian.setPhone(guardianRequestDTO.phone());
             guardian.setEmail(guardianRequestDTO.email());
             guardian.setAddress(guardianRequestDTO.address());
 

@@ -8,7 +8,7 @@ public class GuardianMapper {
     public static Guardian toEntity(GuardianRequestDTO guardianRequestDTO) {
         return new Guardian(
                 guardianRequestDTO.name(),
-                guardianRequestDTO.phoneNumber(),
+                guardianRequestDTO.phone(),
                 guardianRequestDTO.address(),
                 guardianRequestDTO.email());
     }
@@ -17,7 +17,7 @@ public class GuardianMapper {
         return new GuardianResponseDTO(
                 guardian.getId(),
                 guardian.getName(),
-                guardian.getPhoneNumber(),
+                guardian.getPhone(),
                 guardian.getAddress(),
                 guardian.getEmail());
     }

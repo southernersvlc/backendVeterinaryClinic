@@ -13,7 +13,7 @@ public record GuardianRequestDTO(
 
         @NotNull(message = "The phone cannot be null")
         @NotEmpty(message = "The phone cannot be empty")
-        String phoneNumber,
+        String phone,
 
         @NotNull(message = "The email cannot be null")
         @NotEmpty(message = "The email cannot be empty")

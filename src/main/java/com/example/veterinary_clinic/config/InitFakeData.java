@@ -11,11 +11,9 @@ import java.util.List;
 
 @Configuration
 public class InitFakeData {
-    @Autowired
-    GuardianRepository guardianRepository;
 
     @Bean
-    public CommandLineRunner initData() {
+    public CommandLineRunner initData(GuardianRepository guardianRepository) {
         return args -> {
             List<Guardian> guardianList = List.of
                     (new Guardian("Name1", "123456454", "test addres", "hola@email.com"),

@@ -1,8 +1,6 @@
 package com.example.veterinary_clinic.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ public class Guardian {
     @Column(name = "id", nullable = false)
     private Long id;
     private String name;
-    private String phoneNumber;
+    private String phone;
     private String email;
     private String address;
 
@@ -30,17 +28,17 @@ public class Guardian {
     private List<Pet> petsList = new ArrayList<>();
 
 
-    public Guardian(String name, String phoneNumber, String address, String email) {
+    public Guardian(String name, String phone, String address, String email) {
         this.name = name;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
         this.email = email;
         this.address = address;
     }
 
-    public Guardian(Long id, String name, String phoneNumber, String email, String address) {
+    public Guardian(Long id, String name, String phone, String email, String address) {
         this.id = id;
         this.name = name;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
         this.email = email;
         this.address = address;
     }
@@ -50,12 +48,12 @@ public class Guardian {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Guardian guardian = (Guardian) o;
-        return Objects.equals(id, guardian.id) && Objects.equals(name, guardian.name) && Objects.equals(phoneNumber, guardian.phoneNumber) && Objects.equals(email, guardian.email) && Objects.equals(address, guardian.address) && Objects.equals(petsList, guardian.petsList);
+        return Objects.equals(id, guardian.id) && Objects.equals(name, guardian.name) && Objects.equals(phone, guardian.phone) && Objects.equals(email, guardian.email) && Objects.equals(address, guardian.address) && Objects.equals(petsList, guardian.petsList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, phoneNumber, email, address, petsList);
+        return Objects.hash(id, name, phone, email, address, petsList);
     }
 
     @Override
@@ -63,7 +61,7 @@ public class Guardian {
         return "Guardian{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                ", phoneNumber='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
                 ", petsList=" + petsList +
