@@ -21,15 +21,15 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    private String date;
-    private String time;
+    private LocalDate date;
+    private LocalTime time;
     private String reason;
 
     @ManyToOne
     @JoinColumn(name = "petId", nullable = false)
     private Pet pet;
 
-    public Appointment(String date, String time, String reason, Pet pet) {
+    public Appointment(LocalDate date, LocalTime time, String reason, Pet pet) {
         this.date = date;
         this.time = time;
         this.reason = reason;

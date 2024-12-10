@@ -26,21 +26,21 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public List<AppointmentResponseDTO> getAllAppointments() {
+    public ResponseEntity<List<AppointmentResponseDTO>> getAllAppointments() {
         List<AppointmentResponseDTO> appointmentList = appointmentService.findAll();
-        return new ResponseEntity<>(appointmentList, HttpStatus.OK).getBody();
+        return new ResponseEntity<>(appointmentList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public AppointmentResponseDTO getAppointmentById(@PathVariable Long id) {
+    public ResponseEntity<AppointmentResponseDTO> getAppointmentById(@PathVariable Long id) {
         AppointmentResponseDTO appointmentResponseDTO = appointmentService.findById(id);
-        return new ResponseEntity<>(appointmentResponseDTO, HttpStatus.OK).getBody();
+        return new ResponseEntity<>(appointmentResponseDTO, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public AppointmentResponseDTO updateAppointment(@PathVariable Long id, @RequestBody @Valid AppointmentRequestDTO appointmentRequestDTO) {
+    public ResponseEntity<AppointmentResponseDTO> updateAppointment(@PathVariable Long id, @RequestBody @Valid AppointmentRequestDTO appointmentRequestDTO) {
         AppointmentResponseDTO appointmentResponseDTO = appointmentService.updateAppointmentById(id, appointmentRequestDTO);
-        return new ResponseEntity<>(appointmentResponseDTO, HttpStatus.OK).getBody();
+        return new ResponseEntity<>(appointmentResponseDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

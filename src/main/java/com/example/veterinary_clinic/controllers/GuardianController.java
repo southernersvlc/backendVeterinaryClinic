@@ -6,6 +6,7 @@ import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.services.GuardianService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,28 +28,25 @@ public class GuardianController {
         return new ResponseEntity<>(guardianResponseDTO, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public List<GuardianResponseDTO> getAllGuardians() {
-        List<GuardianResponseDTO> guardianList = guardianService.findAll();
-        return new ResponseEntity<>(guardianList, HttpStatus.OK).getBody();
-    }
 
-    @GetMapping("/id/{id}")
-    public GuardianResponseDTO getGuardianById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<GuardianResponseDTO> getGuardianById(@PathVariable Long id) {
         GuardianResponseDTO guardianResponseDTO = guardianService.findById(id);
-        return new ResponseEntity<>(guardianResponseDTO, HttpStatus.OK).getBody();
+        return new ResponseEntity<>(guardianResponseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/name")
-    public List<GuardianResponseDTO> getGuardianByName(@RequestParam String name) {
-        List<GuardianResponseDTO> guardians = guardianService.findByNameIgnoreCaseContaining(name);
-        return new ResponseEntity<>(guardians, HttpStatus.OK).getBody();
+    @GetMapping
+    public List<GuardianResponseDTO> getGuardianByName(@PathParam("name") String name) {
+        if (name == null) {
+            return guardianService.findAll();
+        }
+        return guardianService.findByNameIgnoreCaseContaining(name);
     }
 
    @PutMapping("/{id}")
-    public GuardianResponseDTO updateGuardian(@PathVariable Long id, @RequestBody @Valid GuardianRequestDTO guardianRequestDTO) {
+    public ResponseEntity<GuardianResponseDTO> updateGuardian(@PathVariable Long id, @RequestBody @Valid GuardianRequestDTO guardianRequestDTO) {
        GuardianResponseDTO guardianResponseDTO = guardianService.updateGuardianById(id, guardianRequestDTO);
-       return new ResponseEntity<>(guardianResponseDTO, HttpStatus.OK).getBody();
+       return new ResponseEntity<>(guardianResponseDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

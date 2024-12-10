@@ -40,16 +40,8 @@ public class GuardianService {
 
     public List<GuardianResponseDTO> findAll() {
         List<Guardian> guardianList = guardianRepository.findAll();
-        List<GuardianResponseDTO> responseList = new java.util.ArrayList<>(Collections.emptyList());
-        guardianList.forEach(guardian -> {
-            GuardianResponseDTO guardianResponseDTO = GuardianMapper.toResponseDto(guardian);
-            responseList.add(guardianResponseDTO);
-        });
-
-        if(responseList.isEmpty()) {
-           throw new VeterinaryNotFoundException("There is not guardian to show");
-        }
-        return responseList;
+        return guardianList.stream()
+                .map(GuardianMapper::toResponseDto).toList();
     }
 
     public GuardianResponseDTO findById(Long id) {
@@ -64,12 +56,13 @@ public class GuardianService {
 
 
     public List<GuardianResponseDTO> findByNameIgnoreCaseContaining(String name) {
-        List<GuardianResponseDTO> guardians = guardianRepository.findByNameIgnoreCaseContaining(name);
+        List<Guardian> guardians = guardianRepository.findByNameIgnoreCaseContaining(name);
 
         if (guardians.isEmpty()) {
             throw new VeterinaryNotFoundException("The guardian with name " + name + " does not exist.");
         }
-        return guardians;
+        return guardians.stream()
+                .map(GuardianMapper::toResponseDto).toList();
     }
 
     public GuardianResponseDTO updateGuardianById(Long id, GuardianRequestDTO guardianRequestDTO) {

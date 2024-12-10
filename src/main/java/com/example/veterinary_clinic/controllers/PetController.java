@@ -22,15 +22,15 @@ public class PetController {
     }
 
     @GetMapping()
-    public List<PetResponseDTO> getAllPets() {
+    public ResponseEntity<List<PetResponseDTO>> getAllPets() {
         List<PetResponseDTO> allPets = petServices.listAllPets();
-        return new ResponseEntity<>(allPets, HttpStatus.OK).getBody();
+        return new ResponseEntity<>(allPets, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public PetResponseDTO getPetById(@PathVariable Long id) {
+    public ResponseEntity<PetResponseDTO> getPetById(@PathVariable Long id) {
             PetResponseDTO petResponseDTO = petServices.showPetById(id);
-        return new ResponseEntity<>(petResponseDTO, HttpStatus.OK).getBody();
+        return new ResponseEntity<>(petResponseDTO, HttpStatus.OK);
 
     }
 
@@ -41,20 +41,15 @@ public class PetController {
     }
 
     @PutMapping("/{id}")
-    public PetResponseDTO updatePet(@PathVariable Long id, @RequestBody @Valid PetRequestDTO petRequestDTO) {
+    public ResponseEntity<PetResponseDTO> updatePet(@PathVariable Long id, @RequestBody @Valid PetRequestDTO petRequestDTO) {
         PetResponseDTO modifiedPet = petServices.modifyPet(id, petRequestDTO);
-        return new ResponseEntity<>(modifiedPet, HttpStatus.OK).getBody();
-
+        return new ResponseEntity<>(modifiedPet, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePet(@PathVariable Long id) {
-        try {
+    public ResponseEntity<String> deletePet(@PathVariable Long id) {
             petServices.deletePetById(id);
             return new ResponseEntity<>("The pet has been deleted successfully.", HttpStatus.OK);
-        } catch (PetNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
     }
 }
 

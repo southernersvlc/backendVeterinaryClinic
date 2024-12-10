@@ -35,8 +35,8 @@ public class AppointmentService {
         Optional<Pet> pet = petRepository.findById(appointmentRequestDTO.petId());
         if (pet.isPresent()) {
             Appointment appointment = AppointmentMapper.toEntity(appointmentRequestDTO, pet.get());
-            Appointment savedAppoiment = appointmentRepository.save(appointment);
-            return AppointmentMapper.toResponseDto(savedAppoiment);
+            Appointment savedAppointment = appointmentRepository.save(appointment);
+            return AppointmentMapper.toResponseDto(savedAppointment);
         }
         throw new VeterinaryNotFoundException("There is no pet with this id.");
     }

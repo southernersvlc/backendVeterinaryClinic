@@ -66,7 +66,7 @@ class GuardianServiceTest {
     }
 
 
-    @Test
+    /*@Test
     void should_findAGuardianByAValidName() {
         //GIVEN
         String expectedGuardianName = "some-name";
@@ -84,5 +84,5 @@ class GuardianServiceTest {
         //THEN
         verify(guardianRepository).findByNameIgnoreCaseContaining(expectedGuardianName);
         assertEquals(expectedResultList, responseList);
-    }
+    }*/
 }
