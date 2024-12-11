@@ -11,6 +11,10 @@ import com.example.veterinary_clinic.repositories.GuardianRepository;
 import com.example.veterinary_clinic.repositories.PetRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -95,4 +99,10 @@ public class AppointmentService {
         }
         appointmentRepository.deleteById(id);
     }
+
+    public List<AppointmentResponseDTO> findFutureAppointments(Long petId) {
+        LocalDate actualDate = LocalDate.now();
+        LocalTime actualTime = LocalTime.now();
+        List<Appointment> appointments = appointmentRepository.findFutureAppointments(petId, actualDate, actualTime);
+        return appointments.stream() .map(AppointmentMapper::toResponseDto) .collect(Collectors.toList()); }
 }

@@ -37,6 +37,14 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentResponseDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/next")
+    public ResponseEntity<List<AppointmentResponseDTO>> getNextAppointmentsByPetId(@RequestParam Long petId) {
+        List<AppointmentResponseDTO> appointmentList = appointmentService.findFutureAppointments(petId);
+        return new ResponseEntity<>(appointmentList, HttpStatus.OK);
+    }
+
+
+
     @PutMapping("/{id}")
     public ResponseEntity<AppointmentResponseDTO> updateAppointment(@PathVariable Long id, @RequestBody @Valid AppointmentRequestDTO appointmentRequestDTO) {
         AppointmentResponseDTO appointmentResponseDTO = appointmentService.updateAppointmentById(id, appointmentRequestDTO);
