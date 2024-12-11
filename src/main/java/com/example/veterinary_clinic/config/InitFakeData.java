@@ -2,14 +2,15 @@ package com.example.veterinary_clinic.config;
 
 import com.example.veterinary_clinic.entities.Guardian;
 import com.example.veterinary_clinic.repositories.GuardianRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.util.List;
 
 @Configuration
+@Profile("!test")
 public class InitFakeData {
 
     @Bean

@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@ActiveProfiles("test")
 class GuardianControllerTest {
 
     @Autowired
@@ -134,10 +136,10 @@ class GuardianControllerTest {
 
         guardianRepository.save(guardian);
 
-        mockMvc.perform(get("/guardians/id/" + guardian.getId())
+        mockMvc.perform(get("/guardians/" + guardian.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(guardian.getId())))
+                .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is(guardian.getName())))
                 .andExpect(jsonPath("$.phone", is(guardian.getPhone())))
                 .andExpect(jsonPath("$.email", is(guardian.getEmail())))
@@ -150,7 +152,7 @@ class GuardianControllerTest {
 
         guardianRepository.save(guardian);
 
-        mockMvc.perform(get("/guardians/name")
+        mockMvc.perform(get("/guardians")
                         .param("name", "jose")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
