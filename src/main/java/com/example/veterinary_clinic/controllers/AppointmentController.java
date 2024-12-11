@@ -43,6 +43,12 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentList, HttpStatus.OK);
     }
 
+    @GetMapping("/past")
+    public ResponseEntity<List<AppointmentResponseDTO>> getPastAppointmentsByPetId(@RequestParam Long petId) {
+        List<AppointmentResponseDTO> appointmentList = appointmentService.findPastAppointments(petId);
+        return new ResponseEntity<>(appointmentList, HttpStatus.OK);
+    }
+
 
 
     @PutMapping("/{id}")

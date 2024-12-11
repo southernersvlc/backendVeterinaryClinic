@@ -51,9 +51,9 @@ public class AppointmentService {
         appointmentList.forEach(appointment -> {
             AppointmentResponseDTO appointmentResponseDTO = AppointmentMapper.toResponseDto(appointment);
             responseList.add(appointmentResponseDTO);
-                });
+        });
 
-        if(appointmentList.isEmpty()) {
+        if (appointmentList.isEmpty()) {
             throw new VeterinaryNotFoundException("There is not appointment to show");
         }
         return responseList;
@@ -62,7 +62,7 @@ public class AppointmentService {
     public AppointmentResponseDTO findById(Long id) {
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
 
-        if(optionalAppointment.isEmpty()) {
+        if (optionalAppointment.isEmpty()) {
             throw new VeterinaryNotFoundException("The appointment with id " + id + " does not exist.");
         }
         Appointment appointment = optionalAppointment.get();
@@ -104,5 +104,15 @@ public class AppointmentService {
         LocalDate actualDate = LocalDate.now();
         LocalTime actualTime = LocalTime.now();
         List<Appointment> appointments = appointmentRepository.findFutureAppointments(petId, actualDate, actualTime);
-        return appointments.stream() .map(AppointmentMapper::toResponseDto) .collect(Collectors.toList()); }
+        return appointments.stream().map(AppointmentMapper::toResponseDto).collect(Collectors.toList());
+    }
+
+    public List<AppointmentResponseDTO> findPastAppointments(Long petId) {
+        LocalDate actualDate = LocalDate.now();
+        LocalTime actualTime = LocalTime.now();
+        List<Appointment> appointments = appointmentRepository.findPastAppointments(petId, actualDate, actualTime);
+        return appointments.stream().map(AppointmentMapper::toResponseDto).collect(Collectors.toList());
+    }
+
 }
+

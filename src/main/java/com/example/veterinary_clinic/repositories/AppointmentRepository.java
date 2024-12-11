@@ -12,4 +12,8 @@ import java.util.List;
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     @Query("SELECT a FROM Appointment a WHERE a.pet.id = :petId AND (a.date > :date OR (a.date = :date AND a.time > :time))")
     List<Appointment> findFutureAppointments(@Param("petId") Long petId, @Param("date") LocalDate date, @Param("time") LocalTime time);
+
+
+    @Query("SELECT a FROM Appointment a WHERE a.pet.id = :petId AND (a.date < :date OR (a.date = :date AND a.time < :time))")
+    List<Appointment> findPastAppointments(@Param("petId") Long petId, @Param("date") LocalDate date, @Param("time") LocalTime time);
 }
