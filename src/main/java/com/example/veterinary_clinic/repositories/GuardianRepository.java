@@ -1,6 +1,9 @@
 package com.example.veterinary_clinic.repositories;
 
 import com.example.veterinary_clinic.entities.Guardian;
+import com.example.veterinary_clinic.entities.Pet;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

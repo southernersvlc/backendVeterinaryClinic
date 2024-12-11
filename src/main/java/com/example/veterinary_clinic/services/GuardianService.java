@@ -22,11 +22,6 @@ public class GuardianService {
     }
 
     public GuardianResponseDTO createGuardian(GuardianRequestDTO guardianRequestDTO) {
-        String phoneNumberPattern = "^\\d{9}$";
-        if (!Pattern.matches(phoneNumberPattern, guardianRequestDTO.phone())) {
-            throw new VeterinaryInvalidPhoneNumberException("Phone number must have exactly 9 digits.");
-        }
-
         Optional<Guardian> existGuardian = guardianRepository.findByPhone(guardianRequestDTO.phone());
         if (existGuardian.isPresent())
             throw new VeterinaryExistingPhoneNumberException("Guardian already exist with this phone number");

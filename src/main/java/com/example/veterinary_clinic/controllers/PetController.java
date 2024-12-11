@@ -2,7 +2,6 @@ package com.example.veterinary_clinic.controllers;
 
 import com.example.veterinary_clinic.dtos.PetRequestDTO;
 import com.example.veterinary_clinic.dtos.PetResponseDTO;
-import com.example.veterinary_clinic.exceptions.PetNotFoundException;
 import com.example.veterinary_clinic.services.PetServices;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
