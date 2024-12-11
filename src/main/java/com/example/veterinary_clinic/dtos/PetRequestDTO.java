@@ -9,8 +9,6 @@ public record PetRequestDTO(
         @NotEmpty(message = "The name cannot be empty")
         String name,
 
-        @NotNull(message = "The breed cannot be null")
-        @NotEmpty(message = "The breed cannot be empty")
         String breed,
 
         @NotNull(message = "The specie cannot be null")

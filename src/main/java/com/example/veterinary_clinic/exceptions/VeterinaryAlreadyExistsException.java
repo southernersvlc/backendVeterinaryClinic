@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class PetNotFoundException extends RuntimeException{
+public class VeterinaryAlreadyExistsException extends RuntimeException{
 
-    public PetNotFoundException(String message){
+    public VeterinaryAlreadyExistsException(String message){
         super(message);
     }
 }
