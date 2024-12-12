@@ -86,7 +86,7 @@ class GuardianControllerTest {
         String guardianWithAWrongPhoneNumber = """
                     {
                         "name": "Jose",
-                        "phone": "123as",
+                        "phone": "111222333",
                         "email":"guardian1@gmail.com",
                         "address": "amatista 1"
                     }
