@@ -3,9 +3,10 @@ services:
     image: postgres:15
     container_name: postgres_dev
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: password
-      POSTGRES_PASSWORD: veterinaryclinic_dev
+      POSTGRES_DB: veterinaryclinic_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
