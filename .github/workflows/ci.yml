@@ -32,5 +32,8 @@ jobs:
       - name: Build with Maven
         run: mvn clean compile
 
+env:
+  SPRING_PROFILES_ACTIVE: dev
+    - 
       - name: Run Tests
         run: mvn test
