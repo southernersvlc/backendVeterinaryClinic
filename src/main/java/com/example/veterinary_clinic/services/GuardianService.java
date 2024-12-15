@@ -41,7 +41,7 @@ public class GuardianService {
         Optional<Guardian> optionalGuardian = guardianRepository.findById(id);
 
         if(optionalGuardian.isEmpty()) {
-            throw new VeterinaryNotFoundException("The guardian with id " + id + " does not exist");
+            throw new VeterinaryNotFoundException("The guardian with id " + id + " does not exist.");
         }
         Guardian guardian = optionalGuardian.get();
         return GuardianMapper.toResponseDto(guardian);
