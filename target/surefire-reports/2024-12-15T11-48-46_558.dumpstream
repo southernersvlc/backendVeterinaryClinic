@@ -1,0 +1,5 @@
+# Created at 2024-12-15T11:48:46.702
+Boot Manifest-JAR contains absolute paths in classpath 'E:\paola\Escritorio\Bootcamp_AWS_Backend\VeterinaryClinic\backendVeterinaryClinic\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+
