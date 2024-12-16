@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,35 +21,44 @@ import java.util.List;
 public class InitFakeData {
 
     @Bean
+    @Order(1)
     public CommandLineRunner initGuardianData(GuardianRepository guardianRepository) {
         return args -> {
-            List<Guardian> guardianList = List.of
-                    (new Guardian("Name1", "123456454", "test addres", "hola@email.com"),
-                            new Guardian("Name2", "123451454", "test addres 2", "hola@email.com"));
-
-            guardianRepository.saveAll(guardianList);
+            if (guardianRepository.count() == 0) {
+                List<Guardian> guardianList = List.of(
+                        new Guardian("Alice Johnson", "123456454", "123 Meadow Lane", "alice.johnson@email.com"),
+                        new Guardian("Emma Smith", "123451454", "124 Meadow Lane", "emma.smith@email.com")
+                );
+                guardianRepository.saveAll(guardianList);
+            }
         };
     }
 
     @Bean
+    @Order(2)
     public CommandLineRunner initPetData(PetRepository petRepository, GuardianRepository guardianRepository) {
         return args -> {
-            List<Pet> petList = List.of
-                    (new Pet("Pet1", "breed1", "DOG", "3", guardianRepository.getReferenceById(1L)),
-                            new Pet("Pet2", "breed2", "CAT", "5", guardianRepository.getReferenceById(2L)));
-
-            petRepository.saveAll(petList);
+            if (petRepository.count() == 0) {
+                List<Pet> petList = List.of(
+                        new Pet("Coco", "Labrador", "DOG", "3", guardianRepository.findById(1L).orElseThrow()),
+                        new Pet("Pelusa", "siames", "CAT", "5", guardianRepository.findById(2L).orElseThrow())
+                );
+                petRepository.saveAll(petList);
+            }
         };
     }
 
     @Bean
-    public CommandLineRunner initAppointmentData(PetRepository petRepository, GuardianRepository guardianRepository, AppointmentRepository appointmentRepository) {
+    @Order(3)
+    public CommandLineRunner initAppointmentData(AppointmentRepository appointmentRepository, PetRepository petRepository) {
         return args -> {
-            List<Appointment> appointmentList = List.of
-                    (new Appointment(LocalDate.of(2024, 12, 17), LocalTime.of(15, 30), "reason1", petRepository.getReferenceById(1L)),
-                            new Appointment(LocalDate.of(2024, 12, 20), LocalTime.of(15, 30), "reason1", petRepository.getReferenceById(2L)));
-
-            appointmentRepository.saveAll(appointmentList);
+            if (appointmentRepository.count() == 0) {
+                List<Appointment> appointmentList = List.of(
+                        new Appointment(LocalDate.of(2024, 12, 17), LocalTime.of(15, 30), "Vaccination", petRepository.findById(1L).orElseThrow()),
+                        new Appointment(LocalDate.of(2024, 12, 20), LocalTime.of(15, 30), "Follow up", petRepository.findById(2L).orElseThrow())
+                );
+                appointmentRepository.saveAll(appointmentList);
+            }
         };
     }
 }
