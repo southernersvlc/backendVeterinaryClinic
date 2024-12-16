@@ -36,6 +36,21 @@ In this project we have worked with several new valuable insights into building 
     - Proper checks to ensure required fields are populated.
     - Error messages for invalid data or non-existent IDs.
 
+- **Frontend Integration**
+  - Connected with a React.js frontend to provide a user-friendly interface for managing the clinic’s data.
+
+---
+## Infrastructure and Deployment
+- **Environment Management**
+  - **Test:** Configuration for running unit and integration tests.
+- **Development:**
+  - Utilizes Docker to create a PostgreSQL database in a container.
+- **Production:**
+  - Backend deployed on Render.com using Docker.
+  - Connected to a PostgreSQL database hosted and managed within Render.com.
+
+## Database Setup
+- Production: PostgreSQL Dockerized and hosted on Render.com.
 ---
 ## Diagrams
 ![erDiagramMargarita.png](Utils%2FerDiagramMargarita.png)
@@ -54,6 +69,12 @@ In this project we have worked with several new valuable insights into building 
 - **Build Tool**: Maven
 - **REST API**: CRUD operations using Spring Controllers
 
+## FrontEnd
+- **Framework**: React.js
+
+## Deployment
+- **Docker**: For containerizing the PostgreSQL database in development and production environments.
+- **Render.com**: Hosting the backend and production PostgreSQL database.
 ---
 
 ## Getting Started 🚀
