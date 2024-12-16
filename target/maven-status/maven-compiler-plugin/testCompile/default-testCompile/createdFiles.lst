@@ -1,0 +1,4 @@
+com\example\veterinary_clinic\services\GuardianServiceTest.class
+com\example\veterinary_clinic\controller\PetControllerTest.class
+com\example\veterinary_clinic\VeterinaryClinicApplicationTests.class
+com\example\veterinary_clinic\controller\GuardianControllerTest.class
