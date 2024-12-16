@@ -26,8 +26,8 @@ public class InitFakeData {
         return args -> {
             if (guardianRepository.count() == 0) {
                 List<Guardian> guardianList = List.of(
-                        new Guardian("Name1", "123456454", "test addres", "hola@email.com"),
-                        new Guardian("Name2", "123451454", "test addres 2", "hola@email.com")
+                        new Guardian("Alice Johnson", "123456454", "123 Meadow Lane", "alice.johnson@email.com"),
+                        new Guardian("Emma Smith", "123451454", "124 Meadow Lane", "emma.smith@email.com")
                 );
                 guardianRepository.saveAll(guardianList);
             }
@@ -40,8 +40,8 @@ public class InitFakeData {
         return args -> {
             if (petRepository.count() == 0) {
                 List<Pet> petList = List.of(
-                        new Pet("Pet1", "breed1", "DOG", "3", guardianRepository.findById(1L).orElseThrow()),
-                        new Pet("Pet2", "breed2", "CAT", "5", guardianRepository.findById(2L).orElseThrow())
+                        new Pet("Coco", "Labrador", "DOG", "3", guardianRepository.findById(1L).orElseThrow()),
+                        new Pet("Pelusa", "siames", "CAT", "5", guardianRepository.findById(2L).orElseThrow())
                 );
                 petRepository.saveAll(petList);
             }
@@ -54,8 +54,8 @@ public class InitFakeData {
         return args -> {
             if (appointmentRepository.count() == 0) {
                 List<Appointment> appointmentList = List.of(
-                        new Appointment(LocalDate.of(2024, 12, 17), LocalTime.of(15, 30), "reason1", petRepository.findById(1L).orElseThrow()),
-                        new Appointment(LocalDate.of(2024, 12, 20), LocalTime.of(15, 30), "reason2", petRepository.findById(2L).orElseThrow())
+                        new Appointment(LocalDate.of(2024, 12, 17), LocalTime.of(15, 30), "Vaccination", petRepository.findById(1L).orElseThrow()),
+                        new Appointment(LocalDate.of(2024, 12, 20), LocalTime.of(15, 30), "Follow up", petRepository.findById(2L).orElseThrow())
                 );
                 appointmentRepository.saveAll(appointmentList);
             }
