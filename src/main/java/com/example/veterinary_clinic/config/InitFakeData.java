@@ -43,7 +43,8 @@ public class InitFakeData {
     public CommandLineRunner initAppointmentData(PetRepository petRepository, GuardianRepository guardianRepository, AppointmentRepository appointmentRepository) {
         return args -> {
             List<Appointment> appointmentList = List.of
-                    (new Appointment(LocalDate.of(2024, 12, 17), LocalTime.of(15, 30), "reason1", petRepository.getReferenceById(1L)));
+                    (new Appointment(LocalDate.of(2024, 12, 17), LocalTime.of(15, 30), "reason1", petRepository.getReferenceById(1L)),
+                            new Appointment(LocalDate.of(2024, 12, 20), LocalTime.of(15, 30), "reason1", petRepository.getReferenceById(2L)));
 
             appointmentRepository.saveAll(appointmentList);
         };
