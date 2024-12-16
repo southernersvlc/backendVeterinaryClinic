@@ -1,5 +1,6 @@
 # Veterinary Clinic Application 🐾
-[CI](https://github.com/southernersvlc/backendVeterinaryClinic/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/southernersvlc/backendVeterinaryClinic/actions/workflows/ci.yml/badge.svg)
+
 This is a Spring Boot backend application designed to manage Margarita's veterinary clinic. The system supports the management of **Guardians** and their **Pets** (pets) through CRUD operations.
 
 ---
